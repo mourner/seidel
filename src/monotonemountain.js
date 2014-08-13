@@ -89,18 +89,25 @@ MonotoneMountain.prototype = {
     },
 
     angle: function (p) {
-        var a = p.next.sub(p),
-            b = p.prev.sub(p);
-        return Math.atan2(a.cross(b), a.dot(b));
+        return angle(p.next, p.prev, p);
     },
 
     angleSign: function () {
-        var a = this.head.next.sub(this.head),
-            b = this.tail.sub(this.head);
-        return Math.atan2(a.cross(b), a.dot(b)) >= 0;
+        return angle(this.head.next, this.tail, this.head) >= 0;
     },
 
     isConvex: function (p) {
         return this.positive === (this.angle(p) >= 0);
     }
 };
+
+function angle(a, b, c) {
+    var x1 = a.x - c.x,
+        x2 = b.x - c.x,
+        y1 = a.y - c.y,
+        y2 = b.y - c.y;
+
+    return Math.atan2(
+        x1 * y2 - y1 * x2,
+        x1 * x2 + y1 * y2);
+}

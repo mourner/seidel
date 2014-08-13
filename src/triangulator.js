@@ -16,7 +16,7 @@ function Triangulator(polyline) {
     this.trapezoidalMap = new TrapezoidalMap();
     this.boundingBox = this.trapezoidalMap.boundingBox(this.edges);
     this.queryGraph = new QueryGraph(Sink.get(this.boundingBox));
-    this.trapezoidalMap.queryGraph = this.QueryGraph;
+    this.trapezoidalMap.queryGraph = this.queryGraph;
 }
 
 Triangulator.prototype = {
