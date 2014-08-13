@@ -18,13 +18,14 @@ function Triangulator(polyline) {
     this.trapezoidalMap = new TrapezoidalMap();
     this.boundingBox = this.trapezoidalMap.boundingBox(this.edges);
     this.queryGraph = new QueryGraph(isink(this.boundingBox));
+    this.trapezoidalMap.queryGraph = this.queryGraph;
 }
 
 Triangulator.prototype = {
 
     // Build the trapezoidal map and query graph & return triangles
     triangulate: function() {
-        var i, j, k, t;
+        var i, j, t;
 
         for (i = 0; i < this.edges.length; i++) {
             var edge = this.edges[i],
@@ -38,31 +39,14 @@ Triangulator.prototype = {
 
                 // Bisect old trapezoids and create new
                 var cp = t.contains(edge.p),
-                    cq = t.contains(edge.q),
-                    tlist;
+                    cq = t.contains(edge.q);
 
-                if (cp && cq) {
-                    tlist = this.trapezoidalMap.case1(t, edge);
-                    this.queryGraph.case1(t.sink, edge, tlist);
-
-                } else if (cp && !cq) {
-                    tlist = this.trapezoidalMap.case2(t, edge);
-                    this.queryGraph.case2(t.sink, edge, tlist);
-
-                } else if (!cp && !cq) {
-                    tlist = this.trapezoidalMap.case3(t, edge);
-                    this.queryGraph.case3(t.sink, edge, tlist);
-
-                } else {
-                    tlist = this.trapezoidalMap.case4(t, edge);
-                    this.queryGraph.case4(t.sink, edge, tlist);
-                }
-
-                // Add new trapezoids to map
-                for (k = 0; k < tlist.length; k++) {
-                    this.trapezoidalMap.map[tlist[k].key] = tlist[k];
-                }
+                if (cp && cq) this.trapezoidalMap.case1(t, edge);
+                else if (cp && !cq) this.trapezoidalMap.case2(t, edge);
+                else if (!cp && !cq) this.trapezoidalMap.case3(t, edge);
+                else this.trapezoidalMap.case4(t, edge);
             }
+
             this.trapezoidalMap.clear();
         }
 

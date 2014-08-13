@@ -17,98 +17,114 @@ TrapezoidalMap.prototype = {
         this.tcross = null;
     },
 
+    add: function (t) {
+        this.map[t.key] = t;
+    },
+
     case1: function (t, e) {
-        var trapezoids = [
-            new Trapezoid(t.leftPoint, e.p, t.top, t.bottom),
-            new Trapezoid(e.p, e.q, t.top, e),
-            new Trapezoid(e.p, e.q, e, t.bottom),
-            new Trapezoid(e.q, t.rightPoint, t.top, t.bottom)
-        ];
+        var t1 = new Trapezoid(t.leftPoint, e.p, t.top, t.bottom),
+            t2 = new Trapezoid(e.p, e.q, t.top, e),
+            t3 = new Trapezoid(e.p, e.q, e, t.bottom),
+            t4 = new Trapezoid(e.q, t.rightPoint, t.top, t.bottom);
 
-        trapezoids[0].updateLeft(t.upperLeft, t.lowerLeft);
-        trapezoids[1].updateLeftRight(trapezoids[0], null, trapezoids[3], null);
-        trapezoids[2].updateLeftRight(null, trapezoids[0], null, trapezoids[3]);
-        trapezoids[3].updateRight(t.upperRight, t.lowerRight);
+        t1.updateLeft(t.upperLeft, t.lowerLeft);
+        t2.updateLeftRight(t1, null, t4, null);
+        t3.updateLeftRight(null, t1, null, t4);
+        t4.updateRight(t.upperRight, t.lowerRight);
 
-        return trapezoids;
+        this.queryGraph.case1(t.sink, e, t1, t2, t3, t4);
+
+        this.add(t1);
+        this.add(t2);
+        this.add(t3);
+        this.add(t4);
     },
 
     case2: function (t, e) {
         var rp = e.q.x == t.rightPoint.x ? e.q : t.rightPoint;
 
-        var trapezoids = [
-            new Trapezoid(t.leftPoint, e.p, t.top, t.bottom),
-            new Trapezoid(e.p, rp, t.top, e),
-            new Trapezoid(e.p, rp, e, t.bottom)
-        ];
+        var t1 = new Trapezoid(t.leftPoint, e.p, t.top, t.bottom),
+            t2 = new Trapezoid(e.p, rp, t.top, e),
+            t3 = new Trapezoid(e.p, rp, e, t.bottom);
 
-        trapezoids[0].updateLeft(t.upperLeft, t.lowerLeft);
-        trapezoids[1].updateLeftRight(trapezoids[0], null, t.upperRight, null);
-        trapezoids[2].updateLeftRight(null, trapezoids[0], null, t.lowerRight);
+        t1.updateLeft(t.upperLeft, t.lowerLeft);
+        t2.updateLeftRight(t1, null, t.upperRight, null);
+        t3.updateLeftRight(null, t1, null, t.lowerRight);
 
         this.bcross = t.bottom;
         this.tcross = t.top;
-        e.above = trapezoids[1];
-        e.below = trapezoids[2];
+        e.above = t2;
+        e.below = t3;
 
-        return trapezoids;
+        this.queryGraph.case2(t.sink, e, t1, t2, t3);
+
+        this.add(t1);
+        this.add(t2);
+        this.add(t3);
     },
 
     case3: function (t, e) {
-        var trapezoids = [],
-            lp = e.p.x == t.leftPoint.x ?  e.p : t.leftPoint,
-            rp = e.q.x == t.rightPoint.x ? e.q : t.rightPoint;
+        var lp = e.p.x == t.leftPoint.x ?  e.p : t.leftPoint,
+            rp = e.q.x == t.rightPoint.x ? e.q : t.rightPoint,
+            t1, t2;
 
         if (this.tcross === t.top) {
-            trapezoids.push(t.upperLeft);
-            trapezoids[0].updateRight(t.upperRight, null);
-            trapezoids[0].rightPoint = rp;
+            t1 = t.upperLeft;
+            t1.updateRight(t.upperRight, null);
+            t1.rightPoint = rp;
         } else {
-            trapezoids.push(new Trapezoid(lp, rp, t.top, e));
-            trapezoids[0].updateLeftRight(t.upperLeft, e.above, t.upperRight, null);
+            t1 = new Trapezoid(lp, rp, t.top, e);
+            t1.updateLeftRight(t.upperLeft, e.above, t.upperRight, null);
         }
 
         if (this.bcross === t.bottom) {
-            trapezoids.push(t.lowerLeft);
-            trapezoids[1].updateRight(null, t.lowerRight);
-            trapezoids[1].rightPoint = rp;
+            t2 = t.lowerLeft;
+            t2.updateRight(null, t.lowerRight);
+            t2.rightPoint = rp;
         } else {
-            trapezoids.push(new Trapezoid(lp, rp, e, t.bottom));
-            trapezoids[1].updateLeftRight(e.below, t.lowerLeft, null, t.lowerRight);
+            t2 = new Trapezoid(lp, rp, e, t.bottom);
+            t2.updateLeftRight(e.below, t.lowerLeft, null, t.lowerRight);
         }
 
         this.bcross = t.bottom;
         this.tcross = t.top;
-        e.above = trapezoids[0];
-        e.below = trapezoids[1];
+        e.above = t1;
+        e.below = t2;
 
-        return trapezoids;
+        this.queryGraph.case3(t.sink, e, t1, t2);
+
+        this.add(t1);
+        this.add(t2);
     },
 
     case4: function (t, e) {
-        var trapezoids = [],
-            lp = e.p.x == t.leftPoint.x ? e.p : t.leftPoint;
+        var lp = e.p.x == t.leftPoint.x ? e.p : t.leftPoint,
+            t1, t2, t3;
 
         if (this.tcross === t.top) {
-            trapezoids.push(t.upperLeft);
-            trapezoids[0].rightPoint = e.q;
+            t1 = t.upperLeft;
+            t1.rightPoint = e.q;
         } else {
-            trapezoids.push(new Trapezoid(lp, e.q, t.top, e));
-            trapezoids[0].updateLeft(t.upperLeft, e.above);
+            t1 = new Trapezoid(lp, e.q, t.top, e);
+            t1.updateLeft(t.upperLeft, e.above);
         }
 
         if (this.bcross === t.bottom) {
-            trapezoids.push(t.lowerLeft);
-            trapezoids[1].rightPoint = e.q;
+            t2 = t.lowerLeft;
+            t2.rightPoint = e.q;
         } else {
-            trapezoids.push(new Trapezoid(lp, e.q, e, t.bottom));
-            trapezoids[1].updateLeft(e.below, t.lowerLeft);
+            t2 = new Trapezoid(lp, e.q, e, t.bottom);
+            t2.updateLeft(e.below, t.lowerLeft);
         }
 
-        trapezoids.push(new Trapezoid(e.q, t.rightPoint, t.top, t.bottom));
-        trapezoids[2].updateLeftRight(trapezoids[0], trapezoids[1], t.upperRight, t.lowerRight);
+        t3 = new Trapezoid(e.q, t.rightPoint, t.top, t.bottom);
+        t3.updateLeftRight(t1, t2, t.upperRight, t.lowerRight);
 
-        return trapezoids;
+        this.queryGraph.case4(t.sink, e, t1, t2, t3);
+
+        this.add(t1);
+        this.add(t2);
+        this.add(t3);
     },
 
     boundingBox: function (edges) {

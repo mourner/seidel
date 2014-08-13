@@ -36,27 +36,27 @@ QueryGraph.prototype = {
         }
     },
 
-    case1: function (sink, edge, tlist) {
-        var yNode = new YNode(edge, isink(tlist[1]), isink(tlist[2])),
-            qNode = new XNode(edge.q, yNode, isink(tlist[3])),
-            pNode = new XNode(edge.p, isink(tlist[0]), qNode);
+    case1: function (sink, edge, t1, t2, t3, t4) {
+        var yNode = new YNode(edge, isink(t2), isink(t3)),
+            qNode = new XNode(edge.q, yNode, isink(t4)),
+            pNode = new XNode(edge.p, isink(t1), qNode);
         this.replace(sink, pNode);
     },
 
-    case2: function (sink, edge, tlist) {
-        var yNode = new YNode(edge, isink(tlist[1]), isink(tlist[2])),
-            pNode = new XNode(edge.p, isink(tlist[0]), yNode);
+    case2: function (sink, edge, t1, t2, t3) {
+        var yNode = new YNode(edge, isink(t2), isink(t3)),
+            pNode = new XNode(edge.p, isink(t1), yNode);
         this.replace(sink, pNode);
     },
 
-    case3: function (sink, edge, tlist) {
-        var yNode = new YNode(edge, isink(tlist[0]), isink(tlist[1]));
+    case3: function (sink, edge, t1, t2) {
+        var yNode = new YNode(edge, isink(t1), isink(t2));
         this.replace(sink, yNode);
     },
 
-    case4: function (sink, edge, tlist) {
-        var yNode = new YNode(edge, isink(tlist[0]), isink(tlist[1])),
-            qNode = new XNode(edge.q, yNode, isink(tlist[2]));
+    case4: function (sink, edge, t1, t2, t3) {
+        var yNode = new YNode(edge, isink(t1), isink(t2)),
+            qNode = new XNode(edge.q, yNode, isink(t3));
         this.replace(sink, qNode);
     }
 };
