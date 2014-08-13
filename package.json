@@ -1,0 +1,17 @@
+{
+  "name": "seidel",
+  "version": "0.0.0",
+  "description": "Seidel's polygon triangulation implementation",
+  "scripts": {
+    "test": "jshint src"
+  },
+  "author": "Mason Green",
+  "license": "MIT",
+  "devDependencies": {
+    "jshint": "^2.5.3"
+  },
+  "jshintConfig": {
+    "node": true,
+    "unused": true
+  }
+}
