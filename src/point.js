@@ -9,28 +9,13 @@ function Point(x, y) {
 
 Point.prototype = {
     sub: function (other) {
-        if (other instanceof Point) return new Point(this.x - other.x, this.y - other.y);
-        return new Point(this.x - other, this.y - other);
+        return new Point(this.x - other.x, this.y - other.y);
     },
-    add: function (other) {
-        if (other instanceof Point) return new Point(this.x - other.x, this.y - other.y);
-        return new Point(this.x - other, this.y - other);
+    cross: function (p) {
+        return this.x * p.y - this.y * p.x;
     },
-
-    mul: function (f) { return new Point(this.x * f, this.y * f); },
-    div: function (a) { return new Point(this.x / a, this.y / a); },
-
-    cross: function (p) { return this.x * p.y - this.y * p.x; },
-    dot:   function (p) { return this.x * p.x + this.y * p.y; },
-
-    length: function () {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
-    },
-    normalize: function () {
-        return this.div(this.length());
-    },
-    less: function (p) {
-        return this.x < p.x;
+    dot: function (p) {
+        return this.x * p.x + this.y * p.y;
     },
     neq: function (other) {
         return other.x !== this.x || other.y !== this.y;

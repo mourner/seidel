@@ -51,14 +51,6 @@ Trapezoid.prototype = {
                this.bottom.isBelow(point);
     },
 
-    vertices: function () {
-        var v1 = lineIntersect(this.top, this.leftPoint.x),
-            v2 = lineIntersect(this.bottom, this.leftPoint.x),
-            v3 = lineIntersect(this.bottom, this.rightPoint.x),
-            v4 = lineIntersect(this.top, this.rightPoint.x);
-        return [v1, v2, v3, v4];
-    },
-
     addPoints: function () {
         if (this.leftPoint !== this.bottom.p) this.bottom.mpoints.push(this.leftPoint.clone());
         if (this.rightPoint !== this.bottom.q) this.bottom.mpoints.push(this.rightPoint.clone());
@@ -67,8 +59,3 @@ Trapezoid.prototype = {
         if (this.rightPoint !== this.top.q) this.top.mpoints.push(this.rightPoint.clone());
     }
 };
-
-function lineIntersect(edge, x) {
-    var y =  edge.slope * x + edge.b;
-    return [x, y]; // TODO x, y?
-}
