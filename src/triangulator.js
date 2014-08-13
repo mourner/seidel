@@ -34,8 +34,8 @@ Triangulator.prototype = {
             for (j = 0; j < traps.length; j++) {
                 t = traps[j];
 
-                 // Remove old trapezoids
-                this.trapezoidalMap.map[t.key] = null;
+                 // Remove old trapezoid
+                t.removed = true;
 
                 // Bisect old trapezoids and create new
                 var cp = t.contains(edge.p),
@@ -50,18 +50,17 @@ Triangulator.prototype = {
             this.trapezoidalMap.clear();
         }
 
-        var map = this.trapezoidalMap.map,
-            keys = Object.keys(map);
+        var items = this.trapezoidalMap.items;
 
         // Mark outside trapezoids w/ depth-first search
-        for (i = 0; i < keys.length; i++) {
-            if (map[keys[i]]) this._markOutside(map[keys[i]]);
+        for (i = 0; i < items.length; i++) {
+            if (!items[i].removed) this._markOutside(items[i]);
         }
 
         // Collect interior trapezoids
-        for (i = 0; i < keys.length; i++) {
-            t = map[keys[i]];
-            if (t && t.inside) {
+        for (i = 0; i < items.length; i++) {
+            t = items[i];
+            if (!t.removed && t.inside) {
                 this.trapezoids.push(t);
                 t.addPoints();
             }

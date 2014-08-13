@@ -2,15 +2,13 @@
 
 module.exports = Trapezoid;
 
-var id = 0;
-
 function Trapezoid(leftPoint, rightPoint, top, bottom) {
     this.leftPoint = leftPoint;
     this.rightPoint = rightPoint;
     this.top = top;
     this.bottom = bottom;
     this.inside = true;
-    this.key = id++;
+    this.removed = false;
 }
 
 Trapezoid.prototype = {

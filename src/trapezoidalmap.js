@@ -7,7 +7,7 @@ var Trapezoid = require('./trapezoid'),
     Edge = require('./edge');
 
 function TrapezoidalMap() {
-    this.map = {};
+    this.items = [];
     this.margin = 50;
 }
 
@@ -15,10 +15,6 @@ TrapezoidalMap.prototype = {
     clear: function () {
         this.bcross = null;
         this.tcross = null;
-    },
-
-    add: function (t) {
-        this.map[t.key] = t;
     },
 
     case1: function (t, e) {
@@ -34,10 +30,7 @@ TrapezoidalMap.prototype = {
 
         this.queryGraph.case1(t.sink, e, t1, t2, t3, t4);
 
-        this.add(t1);
-        this.add(t2);
-        this.add(t3);
-        this.add(t4);
+        this.items.push(t1, t2, t3, t4);
     },
 
     case2: function (t, e) {
@@ -58,9 +51,7 @@ TrapezoidalMap.prototype = {
 
         this.queryGraph.case2(t.sink, e, t1, t2, t3);
 
-        this.add(t1);
-        this.add(t2);
-        this.add(t3);
+        this.items.push(t1, t2, t3);
     },
 
     case3: function (t, e) {
@@ -93,8 +84,7 @@ TrapezoidalMap.prototype = {
 
         this.queryGraph.case3(t.sink, e, t1, t2);
 
-        this.add(t1);
-        this.add(t2);
+        this.items.push(t1, t2);
     },
 
     case4: function (t, e) {
@@ -122,9 +112,7 @@ TrapezoidalMap.prototype = {
 
         this.queryGraph.case4(t.sink, e, t1, t2, t3);
 
-        this.add(t1);
-        this.add(t2);
-        this.add(t3);
+        this.items.push(t1, t2, t3);
     },
 
     boundingBox: function (edges) {
@@ -155,7 +143,7 @@ TrapezoidalMap.prototype = {
 
         var trap = new Trapezoid(bottom.p, top.q, top, bottom);
 
-        this.map[trap.key] = trap;
+        this.items.push(trap);
 
         return trap;
     }
