@@ -17,20 +17,20 @@ MonotoneMountain.prototype = {
     add: function (point) {
         if (this.size === 0) {
             this.head = point;
-            this.size = 1;
+            this.size++;
 
         } else if (this.size === 1) {
             if (point.neq(this.head)) {
                 this.tail = point;
                 this.tail.prev = this.head;
                 this.head.next = this.tail;
-                this.size = 2;
+                this.size++;
             }
         } else if (point.neq(this.tail)) {
             this.tail.next = point;
             point.prev = this.tail;
             this.tail = point;
-            this.size += 1;
+            this.size++;
         }
     },
 
@@ -39,7 +39,7 @@ MonotoneMountain.prototype = {
             prev = point.prev;
         point.prev.next = next;
         point.next.prev = prev;
-        this.size -= 1;
+        this.size--;
     },
 
     process: function () {

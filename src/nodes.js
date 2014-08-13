@@ -4,19 +4,16 @@ exports.Node = Node;
 exports.Sink = Sink;
 exports.XNode = XNode;
 exports.YNode = YNode;
-exports.isink = isink;
 
 
 function Node(lchild, rchild) {
     this.parents = [];
-    if (lchild) {
-        this.lchild = lchild;
-        lchild.parents.push(this);
-    }
-    if (rchild) {
-        this.rchild = rchild;
-        rchild.parents.push(this);
-    }
+
+    this.lchild = lchild;
+    this.rchild = rchild;
+
+    if (lchild) lchild.parents.push(this);
+    if (rchild) rchild.parents.push(this);
 }
 
 Node.prototype.replace = function (node) {
@@ -25,8 +22,9 @@ Node.prototype.replace = function (node) {
 
         if (parent.lchild === node) parent.lchild = this;
         else parent.rchild = this;
+
+        this.parents.push(parent);
     }
-    this.parents = this.parents.concat(node.parents);
 };
 
 
@@ -42,10 +40,9 @@ Sink.prototype.locate = function () {
     return this;
 };
 
-function isink(trapezoid) {
-    if (!trapezoid.sink) return new Sink(trapezoid);
-    return trapezoid.sink;
-}
+Sink.get = function (trapezoid) {
+    return trapezoid.sink || new Sink(trapezoid);
+};
 
 
 function XNode(point, lchild, rchild) {

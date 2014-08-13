@@ -6,19 +6,17 @@ var Point = require('./point'),
     Edge = require('./edge'),
     TrapezoidalMap = require('./trapezoidalmap'),
     QueryGraph = require('./querygraph'),
-    isink = require('./nodes').isink,
+    Sink = require('./nodes').Sink,
     MonotoneMountain = require('./monotonemountain');
 
 // Number of points should be > 3
 function Triangulator(polyline) {
     this.triangles = [];
-    this.trapezoids = [];
-    this.xmonoPoly = [];
-    this._initEdges(polyline);
+    this.initEdges(polyline);
     this.trapezoidalMap = new TrapezoidalMap();
     this.boundingBox = this.trapezoidalMap.boundingBox(this.edges);
-    this.queryGraph = new QueryGraph(isink(this.boundingBox));
-    this.trapezoidalMap.queryGraph = this.queryGraph;
+    this.queryGraph = new QueryGraph(Sink.get(this.boundingBox));
+    this.trapezoidalMap.queryGraph = this.QueryGraph;
 }
 
 Triangulator.prototype = {
@@ -54,34 +52,31 @@ Triangulator.prototype = {
 
         // Mark outside trapezoids w/ depth-first search
         for (i = 0; i < items.length; i++) {
-            if (!items[i].removed) this._markOutside(items[i]);
+            if (!items[i].removed) this.markOutside(items[i]);
         }
 
         // Collect interior trapezoids
         for (i = 0; i < items.length; i++) {
             t = items[i];
-            if (!t.removed && t.inside) {
-                this.trapezoids.push(t);
-                t.addPoints();
-            }
+            if (!t.removed && t.inside) t.addPoints();
         }
 
         // Generate the triangles
-        this._createMountains();
+        this.createMountains();
 
         return this.triangles;
     },
 
-    _createMountains: function() {
+    createMountains: function() {
         for (var i = 0; i < this.edges.length; i++) {
-            var edge = this.edges[i];
+            var edge = this.edges[i],
+                points = edge.mpoints;
 
-            if (edge.mpoints.length > 2) {
-
-                var mountain = new MonotoneMountain(),
-                    points = edge.mpoints;
+            if (points.length > 2) {
 
                 points.sort(compareX);
+
+                var mountain = new MonotoneMountain();
 
                 for (var j = 0; j < points.length; j++) {
                     mountain.add(points[j]);
@@ -89,16 +84,15 @@ Triangulator.prototype = {
                 mountain.process();
 
                 this.triangles.push.apply(this.triangles, mountain.triangles);
-                this.xmonoPoly.push(mountain);
             }
         }
     },
 
-    _markOutside: function(t) {
+    markOutside: function(t) {
         if (t.top === this.boundingBox.top || t.bottom === this.boundingBox.bottom) t.trimNeighbors();
     },
 
-    _initEdges: function(points) {
+    initEdges: function(points) {
         this.edges = [];
 
         for (var i = 0, len = points.length, j, p, q; i < len; i++) {
