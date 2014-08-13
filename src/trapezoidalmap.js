@@ -20,8 +20,8 @@ TrapezoidalMap.prototype = {
     case1: function (t, e) {
         var trapezoids = [];
 
-        trapezoids.push(new Trapezoid(t.leftPoint, e.p, t.top, t.bottom))
-        trapezoids.push(new Trapezoid(e.p, e.q, t.top, e))
+        trapezoids.push(new Trapezoid(t.leftPoint, e.p, t.top, t.bottom));
+        trapezoids.push(new Trapezoid(e.p, e.q, t.top, e));
         trapezoids.push(new Trapezoid(e.p, e.q, e, t.bottom));
         trapezoids.push(new Trapezoid(e.q, t.rightPoint, t.top, t.bottom));
 
@@ -37,13 +37,13 @@ TrapezoidalMap.prototype = {
         var trapezoids = [],
             rp = e.q.x == t.rightPoint.x ? e.q : t.rightPoint;
 
-        trapezoids.push(new Trapezoid(t.leftPoint, e.p, t.top, t.bottom))
-        trapezoids.push(new Trapezoid(e.p, rp, t.top, e))
-        trapezoids.push(new Trapezoid(e.p, rp, e, t.bottom))
+        trapezoids.push(new Trapezoid(t.leftPoint, e.p, t.top, t.bottom));
+        trapezoids.push(new Trapezoid(e.p, rp, t.top, e));
+        trapezoids.push(new Trapezoid(e.p, rp, e, t.bottom));
 
-        trapezoids[0].updateLeft(t.upperLeft, t.lowerLeft)
-        trapezoids[1].updateLeftRight(trapezoids[0], null, t.upperRight, null)
-        trapezoids[2].updateLeftRight(null, trapezoids[0], null, t.lowerRight)
+        trapezoids[0].updateLeft(t.upperLeft, t.lowerLeft);
+        trapezoids[1].updateLeftRight(trapezoids[0], null, t.upperRight, null);
+        trapezoids[2].updateLeftRight(null, trapezoids[0], null, t.lowerRight);
 
         this.bcross = t.bottom;
         this.tcross = t.top;

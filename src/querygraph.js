@@ -29,7 +29,7 @@ QueryGraph.prototype = {
     },
 
     replace: function (sink, node) {
-        if (sink.parentList.length) {
+        if (sink.parents.length) {
             node.replace(sink);
         } else {
             this.head = node;

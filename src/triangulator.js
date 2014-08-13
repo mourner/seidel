@@ -14,7 +14,7 @@ function Triangulator(polyline) {
     this.triangles = [];
     this.trapezoids = [];
     this.xmonoPoly = [];
-    this.edges = this.initEdges(polyline);
+    this.edges = this._initEdges(polyline);
     this.trapezoidalMap = new TrapezoidalMap();
     this.boundingBox = this.trapezoidalMap.boundingBox(this.edges);
     this.queryGraph = new QueryGraph(isink(this.boundingBox));
@@ -70,7 +70,7 @@ Triangulator.prototype = {
 
         // Mark outside trapezoids w/ depth-first search
         for (k in map) {
-            this.markOutside(map[k]);
+            this._markOutside(map[k]);
         }
         // Collect interior trapezoids
         for (k in map) {
@@ -81,20 +81,12 @@ Triangulator.prototype = {
         }
 
         // Generate the triangles
-        this.createMountains();
+        this._createMountains();
 
         return this.triangles;
     },
 
-    monoPolies: function() {
-        var polies = [];
-        for (var i = 0; i <= this.xmonoPoly.length; i++) {
-            polies.push(this.xmonoPoly[i].monoPoly);
-        }
-        return polies;
-    },
-
-    createMountains: function() {
+    _createMountains: function() {
         for (var i = 0; i < this.edges.length; i++) {
             var edge = this.edges[i];
 
@@ -116,11 +108,11 @@ Triangulator.prototype = {
         }
     },
 
-    markOutside: function(t) {
+    _markOutside: function(t) {
         if (t.top === this.boundingBox.top || t.bottom === this.boundingBox.bottom) t.trimNeighbors();
     },
 
-    initEdges: function(points) {
+    _initEdges: function(points) {
         var edges = [];
 
         for (var i = 0, len = points.length, j, p, q; i < len; i++) {

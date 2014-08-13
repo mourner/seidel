@@ -8,30 +8,30 @@ exports.isink = isink;
 
 
 function Node(lchild, rchild) {
-    this.parentList = [];
+    this.parents = [];
     if (lchild) {
         this.lchild = lchild;
-        lchild.parentList.push(this);
+        lchild.parents.push(this);
     }
     if (rchild) {
         this.rchild = rchild;
-        rchild.parentList.push(this);
+        rchild.parents.push(this);
     }
 }
 
 Node.prototype.replace = function (node) {
-    for (var i = 0; i < node.parentList.length; i++) {
-        var parent = node.parentList[i];
+    for (var i = 0; i < node.parents.length; i++) {
+        var parent = node.parents[i];
 
         if (parent.lchild === node) parent.lchild = this;
         else parent.rchild = this;
     }
-    this.parentList = this.parentList.concat(node.parentList);
+    this.parents = this.parents.concat(node.parents);
 };
 
 
 function Sink(trapezoid) {
-    this.parentList = [];
+    this.parents = [];
     this.trapezoid = trapezoid;
     trapezoid.sink = this;
 }
