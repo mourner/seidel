@@ -14,7 +14,7 @@ function Triangulator(polyline) {
     this.triangles = [];
     this.trapezoids = [];
     this.xmonoPoly = [];
-    this.edges = this._initEdges(polyline);
+    this._initEdges(polyline);
     this.trapezoidalMap = new TrapezoidalMap();
     this.boundingBox = this.trapezoidalMap.boundingBox(this.edges);
     this.queryGraph = new QueryGraph(isink(this.boundingBox));
@@ -113,16 +113,16 @@ Triangulator.prototype = {
     },
 
     _initEdges: function(points) {
-        var edges = [];
+        this.edges = [];
 
         for (var i = 0, len = points.length, j, p, q; i < len; i++) {
             j = i < len - 1 ? i + 1 : 0;
             p = shearTransform(points[i]);
             q = shearTransform(points[j]);
-            edges.push(p.x > q.x ? new Edge(q, p) : new Edge(p, q));
+            this.edges.push(p.x > q.x ? new Edge(q, p) : new Edge(p, q));
         }
 
-        shuffle(edges);
+        shuffle(this.edges);
     }
 };
 

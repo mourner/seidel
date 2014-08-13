@@ -62,9 +62,11 @@ XNode.prototype.locate = function (edge) {
 
 
 function YNode(edge, lchild, rchild) {
-    Node.call(lchild, rchild);
+    Node.call(this, lchild, rchild);
     this.edge = edge;
 }
+
+YNode.prototype = Object.create(Node.prototype);
 
 YNode.prototype.locate = function (edge) {
     if (this.edge.isAbove(edge.p)) return this.rchild.locate(edge);
