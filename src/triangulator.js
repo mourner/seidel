@@ -24,14 +24,14 @@ Triangulator.prototype = {
 
     // Build the trapezoidal map and query graph & return triangles
     triangulate: function() {
-        var i, j, k;
+        var i, j, k, t;
 
         for (i = 0; i < this.edges.length; i++) {
             var edge = this.edges[i],
                 traps = this.queryGraph.followEdge(edge);
 
             for (j = 0; j < traps.length; j++) {
-                var t = traps[j];
+                t = traps[j];
 
                  // Remove old trapezoids
                 delete this.trapezoidalMap.map[t.key];
@@ -66,17 +66,20 @@ Triangulator.prototype = {
             this.trapezoidalMap.clear();
         }
 
-        var map = this.trapezoidalMap.map;
+        var map = this.trapezoidalMap.map,
+            keys = Object.keys(map);
 
         // Mark outside trapezoids w/ depth-first search
-        for (k in map) {
-            this._markOutside(map[k]);
+        for (i = 0; i < keys.length; i++) {
+            this._markOutside(map[keys[i]]);
         }
+
         // Collect interior trapezoids
-        for (k in map) {
-            if (map[k].inside) {
-                this.trapezoids.push(map[k]);
-                map[k].addPoints();
+        for (i = 0; i < keys.length; i++) {
+            t = map[keys[i]];
+            if (t.inside) {
+                this.trapezoids.push(t);
+                t.addPoints();
             }
         }
 
