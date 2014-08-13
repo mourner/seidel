@@ -2,13 +2,17 @@
   "name": "seidel",
   "version": "0.0.0",
   "description": "Seidel's polygon triangulation implementation",
+  "main": "src/triangulator.js",
   "scripts": {
-    "test": "jshint src"
+    "test": "jshint src",
+    "build": "browserify src/triangulator.js | uglifyjs -c warnings=false -m > seidel.min.js"
   },
   "author": "Mason Green",
   "license": "MIT",
   "devDependencies": {
-    "jshint": "^2.5.3"
+    "browserify": "^5.9.3",
+    "jshint": "^2.5.3",
+    "uglifyjs": "^2.3.6"
   },
   "jshintConfig": {
     "node": true,
