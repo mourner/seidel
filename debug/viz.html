@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>debug page</title>
+    <meta charset='utf-8'>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="400"></canvas>
+    <script src='../dist/seidel.dev.js'></script>
+    <script>
+        var testPoints = [[0, 0], [20, 0], [20, 20], [10, 20], [10, 10], [0, 10]];
+
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        var triangles = seidel(testPoints);
+
+        for (var i = 0; i < triangles.length; i++) {
+            drawPoly(triangles[i], 'red');
+        }
+
+        function drawPoly(points, color) {
+            ctx.strokeStyle = color;
+            ctx.beginPath();
+
+            for (var i = 0; i < points.length; i++) {
+                var x = points[i].x * 10 + 10,
+                    y = points[i].y * 10 + 10;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.stroke();
+        }
+    </script>
+</body>
+</html>

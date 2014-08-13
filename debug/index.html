@@ -13,7 +13,7 @@
         ]
 
         console.profile('triangulate');
-        for (var i = 0; i < 1000; i++) {
+        for (var i = 0; i < 10000; i++) {
             seidel(points[i % 2]);
         }
         console.profileEnd('triangulate');
