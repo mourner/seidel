@@ -34,7 +34,7 @@ Triangulator.prototype = {
                 t = traps[j];
 
                  // Remove old trapezoids
-                delete this.trapezoidalMap.map[t.key];
+                this.trapezoidalMap.map[t.key] = null;
 
                 // Bisect old trapezoids and create new
                 var cp = t.contains(edge.p),
@@ -71,13 +71,13 @@ Triangulator.prototype = {
 
         // Mark outside trapezoids w/ depth-first search
         for (i = 0; i < keys.length; i++) {
-            this._markOutside(map[keys[i]]);
+            if (map[keys[i]]) this._markOutside(map[keys[i]]);
         }
 
         // Collect interior trapezoids
         for (i = 0; i < keys.length; i++) {
             t = map[keys[i]];
-            if (t.inside) {
+            if (t && t.inside) {
                 this.trapezoids.push(t);
                 t.addPoints();
             }
@@ -96,7 +96,7 @@ Triangulator.prototype = {
             if (edge.mpoints.length > 2) {
 
                 var mountain = new MonotoneMountain(),
-                    points = edge.mpoints.slice();
+                    points = edge.mpoints;
 
                 points.sort(compareX);
 

@@ -18,12 +18,12 @@ TrapezoidalMap.prototype = {
     },
 
     case1: function (t, e) {
-        var trapezoids = [];
-
-        trapezoids.push(new Trapezoid(t.leftPoint, e.p, t.top, t.bottom));
-        trapezoids.push(new Trapezoid(e.p, e.q, t.top, e));
-        trapezoids.push(new Trapezoid(e.p, e.q, e, t.bottom));
-        trapezoids.push(new Trapezoid(e.q, t.rightPoint, t.top, t.bottom));
+        var trapezoids = [
+            new Trapezoid(t.leftPoint, e.p, t.top, t.bottom),
+            new Trapezoid(e.p, e.q, t.top, e),
+            new Trapezoid(e.p, e.q, e, t.bottom),
+            new Trapezoid(e.q, t.rightPoint, t.top, t.bottom)
+        ];
 
         trapezoids[0].updateLeft(t.upperLeft, t.lowerLeft);
         trapezoids[1].updateLeftRight(trapezoids[0], null, trapezoids[3], null);
@@ -34,12 +34,13 @@ TrapezoidalMap.prototype = {
     },
 
     case2: function (t, e) {
-        var trapezoids = [],
-            rp = e.q.x == t.rightPoint.x ? e.q : t.rightPoint;
+        var rp = e.q.x == t.rightPoint.x ? e.q : t.rightPoint;
 
-        trapezoids.push(new Trapezoid(t.leftPoint, e.p, t.top, t.bottom));
-        trapezoids.push(new Trapezoid(e.p, rp, t.top, e));
-        trapezoids.push(new Trapezoid(e.p, rp, e, t.bottom));
+        var trapezoids = [
+            new Trapezoid(t.leftPoint, e.p, t.top, t.bottom),
+            new Trapezoid(e.p, rp, t.top, e),
+            new Trapezoid(e.p, rp, e, t.bottom)
+        ];
 
         trapezoids[0].updateLeft(t.upperLeft, t.lowerLeft);
         trapezoids[1].updateLeftRight(trapezoids[0], null, t.upperRight, null);
@@ -114,8 +115,8 @@ TrapezoidalMap.prototype = {
         var m = this.margin,
             maxX = edges[0].p.x + m,
             maxY = edges[0].p.y + m,
-            minX = edges[0].q.x + m,
-            minY = edges[0].q.y + m;
+            minX = edges[0].q.x - m,
+            minY = edges[0].q.y - m;
 
         for (var i = 0, e; i < edges.length; i++) {
             e = edges[i];
@@ -136,7 +137,7 @@ TrapezoidalMap.prototype = {
         var top    = new Edge(new Point(minX, maxY), new Point(maxX, maxY)),
             bottom = new Edge(new Point(minX, minY), new Point(maxX, minY));
 
-        var trap = new Trapezoid(top.p, top.q, top, bottom);
+        var trap = new Trapezoid(bottom.p, top.q, top, bottom);
 
         this.map[trap.key] = trap;
 
