@@ -7,7 +7,6 @@ var PI_SLOP = 3.1;
 function MonotoneMountain() {
     this.size = 0;
     this.convexPoints = [];
-    this.monoPoly = [];
     this.triangles = [];
     this.positive = false;
 }
@@ -44,7 +43,6 @@ MonotoneMountain.prototype = {
 
     process: function () {
         this.positive = this.angleSign();
-        this.genMonoPoly();
 
         var p = this.head.next;
 
@@ -64,7 +62,7 @@ MonotoneMountain.prototype = {
     },
 
     triangulate: function () {
-        while (this.convexPoints.length) { // TODO slow?
+        while (this.convexPoints.length) {
             var ear = this.convexPoints.shift(),
                 prev = ear.prev,
                 next = ear.next;
@@ -78,14 +76,6 @@ MonotoneMountain.prototype = {
 
     valid: function (p) {
         return p !== this.head && p !== this.tail && this.isConvex(p);
-    },
-
-    genMonoPoly: function () {
-        var p = this.head;
-        while (p) {
-            this.monoPoly.push(p);
-            p = p.next;
-        }
     },
 
     angle: function (p) {

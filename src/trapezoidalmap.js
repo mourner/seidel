@@ -66,6 +66,7 @@ TrapezoidalMap.prototype = {
         } else {
             t1 = new Trapezoid(lp, rp, t.top, e);
             t1.updateLeftRight(t.upperLeft, e.above, t.upperRight, null);
+            this.items.push(t1);
         }
 
         if (this.bcross === t.bottom) {
@@ -75,6 +76,7 @@ TrapezoidalMap.prototype = {
         } else {
             t2 = new Trapezoid(lp, rp, e, t.bottom);
             t2.updateLeftRight(e.below, t.lowerLeft, null, t.lowerRight);
+            this.items.push(t2);
         }
 
         this.bcross = t.bottom;
@@ -83,8 +85,6 @@ TrapezoidalMap.prototype = {
         e.below = t2;
 
         this.queryGraph.case3(t.sink, e, t1, t2);
-
-        this.items.push(t1, t2);
     },
 
     case4: function (t, e) {
@@ -97,6 +97,7 @@ TrapezoidalMap.prototype = {
         } else {
             t1 = new Trapezoid(lp, e.q, t.top, e);
             t1.updateLeft(t.upperLeft, e.above);
+            this.items.push(t1);
         }
 
         if (this.bcross === t.bottom) {
@@ -105,14 +106,14 @@ TrapezoidalMap.prototype = {
         } else {
             t2 = new Trapezoid(lp, e.q, e, t.bottom);
             t2.updateLeft(e.below, t.lowerLeft);
+            this.items.push(t2);
         }
 
         t3 = new Trapezoid(e.q, t.rightPoint, t.top, t.bottom);
         t3.updateLeftRight(t1, t2, t.upperRight, t.lowerRight);
+        this.items.push(t3);
 
         this.queryGraph.case4(t.sink, e, t1, t2, t3);
-
-        this.items.push(t1, t2, t3);
     },
 
     boundingBox: function (edges) {

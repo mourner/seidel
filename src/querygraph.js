@@ -8,7 +8,7 @@ var nodes = require('./nodes'),
     Sink = nodes.Sink;
 
 function QueryGraph(head) {
-    this.head = head;
+    this.head = Sink.get(head);
 }
 
 QueryGraph.prototype = {

@@ -6,7 +6,6 @@ var Point = require('./point'),
     Edge = require('./edge'),
     TrapezoidalMap = require('./trapezoidalmap'),
     QueryGraph = require('./querygraph'),
-    Sink = require('./nodes').Sink,
     MonotoneMountain = require('./monotonemountain');
 
 // Number of points should be > 3
@@ -15,7 +14,7 @@ function Triangulator(polyline) {
     this.initEdges(polyline);
     this.trapezoidalMap = new TrapezoidalMap();
     this.boundingBox = this.trapezoidalMap.boundingBox(this.edges);
-    this.queryGraph = new QueryGraph(Sink.get(this.boundingBox));
+    this.queryGraph = new QueryGraph(this.boundingBox);
     this.trapezoidalMap.queryGraph = this.queryGraph;
 }
 
@@ -95,11 +94,14 @@ Triangulator.prototype = {
     initEdges: function(points) {
         this.edges = [];
 
-        for (var i = 0, len = points.length, j, p, q; i < len; i++) {
+        var i, j, p, q, len, e;
+
+        for (i = 0, len = points.length; i < len; i++) {
             j = i < len - 1 ? i + 1 : 0;
             p = shearTransform(points[i]);
             q = shearTransform(points[j]);
-            this.edges.push(p.x > q.x ? new Edge(q, p) : new Edge(p, q));
+            e = p.x > q.x ? new Edge(q, p) : new Edge(p, q);
+            this.edges.push(e);
         }
 
         shuffle(this.edges);
