@@ -4,3 +4,11 @@ from earlier version of [poly2tri](https://code.google.com/p/poly2tri/) by Mason
 Ported to JavaScript by Vladimir Agafonkin.
 
 Based on Raimund Seidel's paper "A simple and fast incremental randomized algorithm for computing trapezoidal decompositions and for triangulating polygons".
+
+To build for use in a browser, run:
+
+```bash
+npm install
+npm run build-dev # dist/seidel.dev.js, a dev version with a source map
+npm run build-min # dist/seidel.min.js, a minified production build
+```
