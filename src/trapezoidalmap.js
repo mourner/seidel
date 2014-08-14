@@ -8,7 +8,7 @@ var Trapezoid = require('./trapezoid'),
 
 function TrapezoidalMap() {
     this.items = [];
-    this.margin = 50;
+    this.margin = 1;
 }
 
 TrapezoidalMap.prototype = {

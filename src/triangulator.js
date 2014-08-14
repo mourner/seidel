@@ -73,7 +73,7 @@ Triangulator.prototype = {
 
             if (points.length) {
                 var mountain = new MonotoneMountain(edge.p, edge.q, edge.mpoints);
-                if (mountain.list.length >= 3) mountain.triangulate(this.triangles);
+                mountain.triangulate(this.triangles);
             }
         }
     },
@@ -101,7 +101,7 @@ Triangulator.prototype = {
 
 
 // Shear transform. May effect numerical robustness
-var SHEAR = 1e-6;
+var SHEAR = 1e-14;
 
 function shearTransform(point) {
     return new Point(point[0] + SHEAR * point[1], point[1]);

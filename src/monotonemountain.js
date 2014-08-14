@@ -16,7 +16,7 @@ function MonotoneMountain(a, b, points) {
     for (var i = 0; i < points.length; i++) {
         if (points[i].neq(list.tail)) list.add(points[i]);
     }
-    list.add(b);
+    if (b.neq(list.tail)) list.add(b);
 }
 
 function compareX(a, b) {
@@ -32,10 +32,7 @@ MonotoneMountain.prototype = {
         if (list.length === 3) {
             triangles.push([this.a, p, this.b]);
             return;
-        } else if (list.length === 4) {
-            triangles.push([this.a, p, this.b], [this.b, p, p.next]);
-            return;
-        }
+        } else if (list.length < 3) return;
 
         var convexPoints = [];
 
