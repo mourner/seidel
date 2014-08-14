@@ -13,24 +13,31 @@
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
 
+        // console.profile('seidel');
+        // for (var i = 0; i < 1000; i++) {
         var triangles = seidel(testPoints);
+        // }
+        // console.profileEnd('seidel');
+
+        ctx.strokeStyle = 'red';
+        ctx.fillStyle = 'rgba(255,255,0,0.1)';
 
         for (var i = 0; i < triangles.length; i++) {
-            drawPoly(triangles[i], 'red');
+            drawPoly(triangles[i]);
         }
 
         function drawPoly(points, color) {
-            ctx.strokeStyle = color;
             ctx.beginPath();
 
             for (var i = 0; i < points.length; i++) {
-                var x = points[i].x * 2 - 400,
-                    y = points[i].y * 2 - 600;
+                var x = points[i].x * 2 - 480,
+                    y = points[i].y * 2 - 650;
                 if (i === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             }
             ctx.closePath();
             ctx.stroke();
+            ctx.fill();
         }
     </script>
 </body>
