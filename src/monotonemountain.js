@@ -2,85 +2,70 @@
 
 module.exports = MonotoneMountain;
 
-var PI_SLOP = 3.1;
+var DoublyLinkedList = require('./dlinkedlist');
 
-function MonotoneMountain() {}
+function MonotoneMountain(a, b, points) {
+    this.a = a;
+    this.b = b;
+
+    points.sort(compareX);
+
+    var list = this.list = new DoublyLinkedList();
+
+    list.add(a);
+    for (var i = 0; i < points.length; i++) {
+        if (points[i].neq(list.tail)) list.add(points[i]);
+    }
+    list.add(b);
+}
+
+function compareX(a, b) {
+    return a.x - b.x;
+}
 
 MonotoneMountain.prototype = {
 
-    add: function (point) {
-        if (!this.head) {
-            this.head = point;
-            this.size++;
-
-        } else if (!this.tail) {
-            if (point.neq(this.head)) {
-                this.tail = point;
-                this.tail.prev = this.head;
-                this.head.next = this.tail;
-            }
-        } else if (point.neq(this.tail)) {
-            this.tail.next = point;
-            point.prev = this.tail;
-            this.tail = point;
-        }
-    },
-
-    remove: function (point) {
-        var next = point.next,
-            prev = point.prev;
-        point.prev.next = next;
-        point.next.prev = prev;
-        point.removed = true;
-    },
-
     triangulate: function () {
-        this.positive = angle(this.head.next, this.tail, this.head) >= 0;
+        var list = this.list,
+            p = list.head.next;
 
-        var p = this.head.next,
-            convexPoints = [];
+        if (list.length === 3) return [[this.a, p, this.b]];
+        if (list.length === 4) return [
+            [this.a, p, this.b],
+            [this.b, p, p.next]
+        ];
 
-        while (p !== this.tail) {
-            // var a = angle(p.next, p.prev, p);
-            // if (a >= PI_SLOP || a <= -PI_SLOP || a === 0) this.remove(p);
-            if (this.isConvex(p)) convexPoints.push(p);
+        var convexPoints = [],
+            triangles = [];
+
+        this.positive = angle(p, this.b, this.a) >= 0;
+
+        while (p !== list.tail) {
+            this.addEar(convexPoints, p);
             p = p.next;
         }
 
-        var triangles = [];
-
         while (convexPoints.length) {
-            var ear = convexPoints.shift();
-            if (ear.removed) continue;
-            // TODO see if there's a more efficient way to fix this
-
-            var prev = ear.prev,
+            var ear = convexPoints.shift(),
+                prev = ear.prev,
                 next = ear.next;
 
             triangles.push([prev, ear, next]);
-            this.remove(ear);
 
-            if (this.valid(prev)) convexPoints.push(prev);
-            if (this.valid(next)) convexPoints.push(next);
+            list.remove(ear);
+
+            this.addEar(convexPoints, prev);
+            this.addEar(convexPoints, next);
         }
 
         return triangles;
     },
 
-    // for debugging purposes
-
-    // monoPoly: function () {
-    //     var poly = [];
-    //     var p = this.head;
-    //     while (p) {
-    //         poly.push(p);
-    //         p = p.next;
-    //     }
-    //     return poly;
-    // },
-
-    valid: function (p) {
-        return p !== this.head && p !== this.tail && this.isConvex(p);
+    addEar: function (points, p) {
+        if (!p.ear && p !== this.list.head && p !== this.list.tail && this.isConvex(p)) {
+            p.ear = true;
+            points.push(p);
+        }
     },
 
     isConvex: function (p) {

@@ -71,17 +71,11 @@ Triangulator.prototype = {
             var edge = this.edges[i],
                 points = edge.mpoints;
 
-            if (points.length > 2) {
-
-                points.sort(compareX);
-
-                var mountain = new MonotoneMountain();
-
-                for (var j = 0; j < points.length; j++) {
-                    mountain.add(points[j]);
+            if (points.length) {
+                var mountain = new MonotoneMountain(edge.p, edge.q, edge.mpoints);
+                if (mountain.list.length >= 3) {
+                    this.triangles.push.apply(this.triangles, mountain.triangulate());
                 }
-
-                this.triangles.push.apply(this.triangles, mountain.triangulate());
             }
         }
     },
@@ -107,10 +101,6 @@ Triangulator.prototype = {
     }
 };
 
-
-function compareX(a, b) {
-    return a.x - b.x;
-}
 
 // Shear transform. May effect numerical robustness
 var SHEAR = 1e-6;
