@@ -73,9 +73,7 @@ Triangulator.prototype = {
 
             if (points.length) {
                 var mountain = new MonotoneMountain(edge.p, edge.q, edge.mpoints);
-                if (mountain.list.length >= 3) {
-                    this.triangles.push.apply(this.triangles, mountain.triangulate());
-                }
+                if (mountain.list.length >= 3) mountain.triangulate(this.triangles);
             }
         }
     },

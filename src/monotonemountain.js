@@ -25,18 +25,19 @@ function compareX(a, b) {
 
 MonotoneMountain.prototype = {
 
-    triangulate: function () {
+    triangulate: function (triangles) {
         var list = this.list,
             p = list.head.next;
 
-        if (list.length === 3) return [[this.a, p, this.b]];
-        if (list.length === 4) return [
-            [this.a, p, this.b],
-            [this.b, p, p.next]
-        ];
+        if (list.length === 3) {
+            triangles.push([this.a, p, this.b]);
+            return;
+        } else if (list.length === 4) {
+            triangles.push([this.a, p, this.b], [this.b, p, p.next]);
+            return;
+        }
 
-        var convexPoints = [],
-            triangles = [];
+        var convexPoints = [];
 
         this.positive = angle(p, this.b, this.a) >= 0;
 
@@ -57,8 +58,6 @@ MonotoneMountain.prototype = {
             this.addEar(convexPoints, prev);
             this.addEar(convexPoints, next);
         }
-
-        return triangles;
     },
 
     addEar: function (points, p) {
