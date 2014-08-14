@@ -5,16 +5,18 @@
   "main": "src/seidel.js",
   "scripts": {
     "test": "jshint src",
-    "build-dev": "mkdir -p dist && browserify -d src/seidel.js -s seidel > dist/seidel.dev.js",
-    "build-min": "mkdir -p dist && browserify src/seidel.js -s seidel | uglifyjs -c warnings=false -m > dist/seidel.min.js"
+    "watch": "mkdirp dist && watchify -v -d src/seidel.js -s seidel -o dist/seidel.dev.js",
+    "build-dev": "mkdirp dist && browserify -d src/seidel.js -s seidel > dist/seidel.dev.js",
+    "build-min": "mkdirp dist && browserify src/seidel.js -s seidel | uglifyjs -c warnings=false -m > dist/seidel.min.js"
   },
   "author": "Mason Green",
   "license": "MIT",
   "devDependencies": {
-    "browserify": "^5.9.3",
+    "browserify": "^5.10.0",
     "jshint": "^2.5.3",
     "mkdirp": "^0.5.0",
-    "uglifyjs": "^2.3.6"
+    "uglifyjs": "^2.3.6",
+    "watchify": "^1.0.2"
   },
   "jshintConfig": {
     "node": true,
