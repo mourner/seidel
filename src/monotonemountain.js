@@ -4,32 +4,25 @@ module.exports = MonotoneMountain;
 
 var PI_SLOP = 3.1;
 
-function MonotoneMountain() {
-    this.size = 0;
-    this.convexPoints = [];
-    this.triangles = [];
-    this.positive = false;
-}
+function MonotoneMountain() {}
 
 MonotoneMountain.prototype = {
 
     add: function (point) {
-        if (this.size === 0) {
+        if (!this.head) {
             this.head = point;
             this.size++;
 
-        } else if (this.size === 1) {
+        } else if (!this.tail) {
             if (point.neq(this.head)) {
                 this.tail = point;
                 this.tail.prev = this.head;
                 this.head.next = this.tail;
-                this.size++;
             }
         } else if (point.neq(this.tail)) {
             this.tail.next = point;
             point.prev = this.tail;
             this.tail = point;
-            this.size++;
         }
     },
 
@@ -38,58 +31,60 @@ MonotoneMountain.prototype = {
             prev = point.prev;
         point.prev.next = next;
         point.next.prev = prev;
-        this.size--;
         point.removed = true;
     },
 
-    process: function () {
-        this.positive = this.angleSign();
+    triangulate: function () {
+        this.positive = angle(this.head.next, this.tail, this.head) >= 0;
 
-        var p = this.head.next;
+        var p = this.head.next,
+            convexPoints = [];
 
         while (p !== this.tail) {
-            var a = this.angle(p);
-
-            if (a >= PI_SLOP || a <= -PI_SLOP || a === 0) {
-                this.remove(p);
-
-            } else if (this.isConvex(p)) {
-                this.convexPoints.push(p);
-            }
+            // var a = angle(p.next, p.prev, p);
+            // if (a >= PI_SLOP || a <= -PI_SLOP || a === 0) this.remove(p);
+            if (this.isConvex(p)) convexPoints.push(p);
             p = p.next;
         }
 
-        this.triangulate();
-    },
+        var triangles = [];
 
-    triangulate: function () {
-        while (this.convexPoints.length) {
-            var ear = this.convexPoints.shift();
+        while (convexPoints.length) {
+            var ear = convexPoints.shift();
             if (ear.removed) continue;
+            // TODO see if there's a more efficient way to fix this
+
             var prev = ear.prev,
                 next = ear.next;
-            this.triangles.push([prev, ear, next]);
+
+            triangles.push([prev, ear, next]);
             this.remove(ear);
-            if (this.valid(prev)) this.convexPoints.push(prev);
-            if (this.valid(next)) this.convexPoints.push(next);
+
+            if (this.valid(prev)) convexPoints.push(prev);
+            if (this.valid(next)) convexPoints.push(next);
         }
-        // assert this.size <= 3, "Triangulation bug, please report"
+
+        return triangles;
     },
+
+    // for debugging purposes
+
+    // monoPoly: function () {
+    //     var poly = [];
+    //     var p = this.head;
+    //     while (p) {
+    //         poly.push(p);
+    //         p = p.next;
+    //     }
+    //     return poly;
+    // },
 
     valid: function (p) {
         return p !== this.head && p !== this.tail && this.isConvex(p);
     },
 
-    angle: function (p) {
-        return angle(p.next, p.prev, p);
-    },
-
-    angleSign: function () {
-        return angle(this.head.next, this.tail, this.head) >= 0;
-    },
-
     isConvex: function (p) {
-        return this.positive === (this.angle(p) >= 0);
+        return this.positive === (angle(p.next, p.prev, p) >= 0);
     }
 };
 

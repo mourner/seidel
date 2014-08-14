@@ -80,9 +80,8 @@ Triangulator.prototype = {
                 for (var j = 0; j < points.length; j++) {
                     mountain.add(points[j]);
                 }
-                mountain.process();
 
-                this.triangles.push.apply(this.triangles, mountain.triangles);
+                this.triangles.push.apply(this.triangles, mountain.triangulate());
             }
         }
     },
