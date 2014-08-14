@@ -1,9 +1,11 @@
 'use strict';
 
-module.exports = triangulate;
+module.exports = seidel;
 
 var Triangulator = require('./triangulator');
 
-function triangulate(points) {
+function seidel(points) {
 	return new Triangulator(points).triangulate();
 }
+
+seidel.Triangulator = Triangulator;
