@@ -39,6 +39,7 @@ MonotoneMountain.prototype = {
         point.prev.next = next;
         point.next.prev = prev;
         this.size--;
+        point.removed = true;
     },
 
     process: function () {
@@ -63,8 +64,9 @@ MonotoneMountain.prototype = {
 
     triangulate: function () {
         while (this.convexPoints.length) {
-            var ear = this.convexPoints.shift(),
-                prev = ear.prev,
+            var ear = this.convexPoints.shift();
+            if (ear.removed) continue;
+            var prev = ear.prev,
                 next = ear.next;
             this.triangles.push([prev, ear, next]);
             this.remove(ear);
