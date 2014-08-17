@@ -7,8 +7,9 @@ var nodes = require('./nodes'),
     XNode = nodes.XNode,
     Sink = nodes.Sink;
 
-function QueryGraph(head) {
+function QueryGraph(head, map) {
     this.head = Sink.get(head);
+    this.map = map;
 }
 
 QueryGraph.prototype = {
@@ -18,14 +19,30 @@ QueryGraph.prototype = {
     },
 
     followEdge: function (edge) {
-        var t = this.locate(edge),
-            trapezoids = [t];
+        var t = this.locate(edge);
+
+        this.splitTrapezoid(t, edge);
 
         while (edge.q.x > t.rightPoint.x) {
             t = edge.isAbove(t.rightPoint) ? t.upperRight : t.lowerRight;
-            trapezoids.push(t);
+            this.splitTrapezoid(t, edge);
         }
-        return trapezoids;
+
+        this.map.clear();
+    },
+
+    splitTrapezoid: function (t, edge) {
+         // Remove old trapezoid
+        t.removed = true;
+
+        // Bisect old trapezoids and create new
+        var cp = t.contains(edge.p),
+            cq = t.contains(edge.q);
+
+        if (cp && cq) this.map.case1(t, edge);
+        else if (cp && !cq) this.map.case2(t, edge);
+        else if (!cp && !cq) this.map.case3(t, edge);
+        else this.map.case4(t, edge);
     },
 
     replace: function (sink, node) {

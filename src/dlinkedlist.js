@@ -4,7 +4,7 @@ module.exports = DoublyLinkedList;
 
 function DoublyLinkedList() {
 	this.length = 0;
-};
+}
 
 DoublyLinkedList.prototype = {
 	add: function (node) {

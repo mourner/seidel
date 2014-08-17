@@ -47,13 +47,13 @@ Sink.get = function (trapezoid) {
 
 function XNode(point, lchild, rchild) {
     Node.call(this, lchild, rchild);
-    this.point = point;
+    this.x = point.x;
 }
 
 XNode.prototype = Object.create(Node.prototype);
 
 XNode.prototype.locate = function (edge) {
-    if (edge.p.x >= this.point.x) return this.rchild.locate(edge);
+    if (edge.p.x >= this.x) return this.rchild.locate(edge);
     return this.lchild.locate(edge);
 };
 

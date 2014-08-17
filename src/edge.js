@@ -6,7 +6,6 @@ function Edge(p, q) {
     this.p = p;
     this.q = q;
     this.slope = q.x - p.x !== 0 ? (q.y - p.y) / (q.x - p.x) : 0;
-    this.b = p.y - (p.x * this.slope);
     this.mpoints = [];
 }
 

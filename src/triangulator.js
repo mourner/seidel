@@ -14,7 +14,7 @@ function Triangulator(polyline) {
     this.initEdges(polyline);
     this.trapezoidalMap = new TrapezoidalMap();
     this.boundingBox = this.trapezoidalMap.boundingBox(this.edges);
-    this.queryGraph = new QueryGraph(this.boundingBox);
+    this.queryGraph = new QueryGraph(this.boundingBox, this.trapezoidalMap);
     this.trapezoidalMap.queryGraph = this.queryGraph;
 }
 
@@ -22,29 +22,10 @@ Triangulator.prototype = {
 
     // Build the trapezoidal map and query graph & return triangles
     triangulate: function() {
-        var i, j, t;
+        var i, t;
 
         for (i = 0; i < this.edges.length; i++) {
-            var edge = this.edges[i],
-                traps = this.queryGraph.followEdge(edge);
-
-            for (j = 0; j < traps.length; j++) {
-                t = traps[j];
-
-                 // Remove old trapezoid
-                t.removed = true;
-
-                // Bisect old trapezoids and create new
-                var cp = t.contains(edge.p),
-                    cq = t.contains(edge.q);
-
-                if (cp && cq) this.trapezoidalMap.case1(t, edge);
-                else if (cp && !cq) this.trapezoidalMap.case2(t, edge);
-                else if (!cp && !cq) this.trapezoidalMap.case3(t, edge);
-                else this.trapezoidalMap.case4(t, edge);
-            }
-
-            this.trapezoidalMap.clear();
+            this.queryGraph.followEdge(this.edges[i]);
         }
 
         var items = this.trapezoidalMap.items;
@@ -68,10 +49,9 @@ Triangulator.prototype = {
 
     createMountains: function() {
         for (var i = 0; i < this.edges.length; i++) {
-            var edge = this.edges[i],
-                points = edge.mpoints;
+            var edge = this.edges[i];
 
-            if (points.length) {
+            if (edge.mpoints.length) {
                 var mountain = new MonotoneMountain(edge.p, edge.q, edge.mpoints);
                 mountain.triangulate(this.triangles);
             }
@@ -95,7 +75,7 @@ Triangulator.prototype = {
             this.edges.push(e);
         }
 
-        shuffle(this.edges);
+        // shuffle(this.edges);
     }
 };
 
@@ -108,12 +88,12 @@ function shearTransform(point) {
 }
 
 // Fisher-Yates shuffle algorithm
-function shuffle(array) {
-    for (var i = array.length - 1, j, tmp; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        tmp = array[i];
-        array[i] = array[j];
-        array[j] = tmp;
-    }
-    return array;
-}
+// function shuffle(array) {
+//     for (var i = array.length - 1, j, tmp; i > 0; i--) {
+//         j = Math.floor(Math.random() * (i + 1));
+//         tmp = array[i];
+//         array[i] = array[j];
+//         array[j] = tmp;
+//     }
+//     return array;
+// }
