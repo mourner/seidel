@@ -8,7 +8,13 @@ var Trapezoid = require('./trapezoid'),
 
 function TrapezoidalMap() {
     this.items = [];
-    this.margin = 1;
+
+    var top = new Edge(new Point(-Infinity, Infinity), new Point(Infinity, Infinity)),
+        bottom = new Edge(new Point(-Infinity, -Infinity), new Point(Infinity, -Infinity));
+
+    this.root = new Trapezoid(bottom.p, top.q, top, bottom);
+
+    this.items.push(this.root);
 }
 
 TrapezoidalMap.prototype = {
@@ -114,38 +120,5 @@ TrapezoidalMap.prototype = {
         this.items.push(t3);
 
         this.queryGraph.case4(t.sink, e, t1, t2, t3);
-    },
-
-    boundingBox: function (edges) {
-        var m = this.margin,
-            maxX = edges[0].p.x + m,
-            maxY = edges[0].p.y + m,
-            minX = edges[0].q.x - m,
-            minY = edges[0].q.y - m;
-
-        for (var i = 0, e; i < edges.length; i++) {
-            e = edges[i];
-
-            if (e.p.x > maxX) maxX = e.p.x + m;
-            if (e.p.y > maxY) maxY = e.p.y + m;
-
-            if (e.q.x > maxX) maxX = e.q.x + m;
-            if (e.q.y > maxY) maxY = e.q.y + m;
-
-            if (e.p.x < minX) minX = e.p.x - m;
-            if (e.p.y < minY) minY = e.p.y - m;
-
-            if (e.q.x < minX) minX = e.q.x - m;
-            if (e.q.y < minY) minY = e.q.y - m;
-        }
-
-        var top    = new Edge(new Point(minX, maxY), new Point(maxX, maxY)),
-            bottom = new Edge(new Point(minX, minY), new Point(maxX, minY));
-
-        var trap = new Trapezoid(bottom.p, top.q, top, bottom);
-
-        this.items.push(trap);
-
-        return trap;
     }
 };

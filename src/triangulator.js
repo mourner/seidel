@@ -13,8 +13,7 @@ function Triangulator(polyline) {
     this.triangles = [];
     this.initEdges(polyline);
     this.trapezoidalMap = new TrapezoidalMap();
-    this.boundingBox = this.trapezoidalMap.boundingBox(this.edges);
-    this.queryGraph = new QueryGraph(this.boundingBox, this.trapezoidalMap);
+    this.queryGraph = new QueryGraph(this.trapezoidalMap.root, this.trapezoidalMap);
     this.trapezoidalMap.queryGraph = this.queryGraph;
 }
 
@@ -59,7 +58,7 @@ Triangulator.prototype = {
     },
 
     markOutside: function(t) {
-        if (t.top === this.boundingBox.top || t.bottom === this.boundingBox.bottom) t.trimNeighbors();
+        if (t.top === this.trapezoidalMap.root.top || t.bottom === this.trapezoidalMap.root.bottom) t.trimNeighbors();
     },
 
     initEdges: function(points) {
