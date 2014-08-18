@@ -37,10 +37,10 @@
         var width = maxX - minX,
             height = maxY - minY;
 
-        canvas.height = window.innerHeight;
+        canvas.height = window.innerHeight - 5;
 
-        var ratio = canvas.height / height;
-        canvas.width = canvas.height * width / height;
+        var ratio = (canvas.height - 5) / height;
+        canvas.width = canvas.height * width / height + 5;
 
         ctx.strokeStyle = 'red';
         ctx.fillStyle = 'rgba(255,255,0,0.1)';
@@ -53,8 +53,8 @@
             ctx.beginPath();
 
             for (var i = 0; i < points.length; i++) {
-                var x = (points[i].x - minX) * ratio,
-                    y = (points[i].y - minY) * ratio;
+                var x = (points[i].x - minX) * ratio + 5,
+                    y = (points[i].y - minY) * ratio + 5;
                 if (i === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             }
