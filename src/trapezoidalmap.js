@@ -4,7 +4,8 @@ module.exports = TrapezoidalMap;
 
 var Trapezoid = require('./trapezoid'),
     Point = require('./point'),
-    Edge = require('./edge');
+    Edge = require('./edge'),
+    QueryGraph = require('./querygraph');
 
 function TrapezoidalMap() {
     this.items = [];
@@ -15,12 +16,37 @@ function TrapezoidalMap() {
     this.root = new Trapezoid(bottom.p, top.q, top, bottom);
 
     this.items.push(this.root);
+
+    this.queryGraph = new QueryGraph(this.root);
 }
 
 TrapezoidalMap.prototype = {
-    clear: function () {
+    addEdge: function (edge) {
+        var t = this.queryGraph.locate(edge);
+
+        this.splitTrapezoid(t, edge);
+
+        while (edge.q.x > t.rightPoint.x) {
+            t = edge.isAbove(t.rightPoint) ? t.upperRight : t.lowerRight;
+            this.splitTrapezoid(t, edge);
+        }
+
         this.bcross = null;
         this.tcross = null;
+    },
+
+    splitTrapezoid: function (t, edge) {
+         // Remove old trapezoid
+        t.removed = true;
+
+        // Bisect old trapezoids and create new
+        var cp = t.contains(edge.p),
+            cq = t.contains(edge.q);
+
+        if (cp && cq) this.case1(t, edge);
+        else if (cp && !cq) this.case2(t, edge);
+        else if (!cp && !cq) this.case3(t, edge);
+        else this.case4(t, edge);
     },
 
     case1: function (t, e) {

@@ -5,7 +5,6 @@ module.exports = Triangulator;
 var Point = require('./point'),
     Edge = require('./edge'),
     TrapezoidalMap = require('./trapezoidalmap'),
-    QueryGraph = require('./querygraph'),
     MonotoneMountain = require('./monotonemountain');
 
 // Number of points should be > 3
@@ -13,8 +12,6 @@ function Triangulator(polyline) {
     this.triangles = [];
     this.initEdges(polyline);
     this.trapezoidalMap = new TrapezoidalMap();
-    this.queryGraph = new QueryGraph(this.trapezoidalMap.root, this.trapezoidalMap);
-    this.trapezoidalMap.queryGraph = this.queryGraph;
 }
 
 Triangulator.prototype = {
@@ -23,8 +20,10 @@ Triangulator.prototype = {
     triangulate: function() {
         var i, t;
 
+        // shuffle(this.edges);
+
         for (i = 0; i < this.edges.length; i++) {
-            this.queryGraph.followEdge(this.edges[i]);
+            this.trapezoidalMap.addEdge(this.edges[i]);
         }
 
         var items = this.trapezoidalMap.items;

@@ -18,33 +18,6 @@ QueryGraph.prototype = {
         return this.head.locate(edge).trapezoid;
     },
 
-    followEdge: function (edge) {
-        var t = this.locate(edge);
-
-        this.splitTrapezoid(t, edge);
-
-        while (edge.q.x > t.rightPoint.x) {
-            t = edge.isAbove(t.rightPoint) ? t.upperRight : t.lowerRight;
-            this.splitTrapezoid(t, edge);
-        }
-
-        this.map.clear();
-    },
-
-    splitTrapezoid: function (t, edge) {
-         // Remove old trapezoid
-        t.removed = true;
-
-        // Bisect old trapezoids and create new
-        var cp = t.contains(edge.p),
-            cq = t.contains(edge.q);
-
-        if (cp && cq) this.map.case1(t, edge);
-        else if (cp && !cq) this.map.case2(t, edge);
-        else if (!cp && !cq) this.map.case3(t, edge);
-        else this.map.case4(t, edge);
-    },
-
     replace: function (sink, node) {
         if (sink.parents.length) {
             node.replace(sink);
@@ -76,4 +49,71 @@ QueryGraph.prototype = {
             qNode = new XNode(edge.q, yNode, Sink.get(t3));
         this.replace(sink, qNode);
     }
+};
+
+
+function Node(lchild, rchild) {
+    this.parents = [];
+
+    this.lchild = lchild;
+    this.rchild = rchild;
+
+    if (lchild) lchild.parents.push(this);
+    if (rchild) rchild.parents.push(this);
+}
+
+Node.prototype.replace = function (node) {
+    for (var i = 0; i < node.parents.length; i++) {
+        var parent = node.parents[i];
+
+        if (parent.lchild === node) parent.lchild = this;
+        else parent.rchild = this;
+
+        this.parents.push(parent);
+    }
+};
+
+
+function Sink(trapezoid) {
+    this.parents = [];
+    this.trapezoid = trapezoid;
+    trapezoid.sink = this;
+}
+
+Sink.prototype = Object.create(Node.prototype);
+
+Sink.prototype.locate = function () {
+    return this;
+};
+
+Sink.get = function (trapezoid) {
+    return trapezoid.sink || new Sink(trapezoid);
+};
+
+
+function XNode(point, lchild, rchild) {
+    Node.call(this, lchild, rchild);
+    this.x = point.x;
+}
+
+XNode.prototype = Object.create(Node.prototype);
+
+XNode.prototype.locate = function (edge) {
+    if (edge.p.x >= this.x) return this.rchild.locate(edge);
+    return this.lchild.locate(edge);
+};
+
+
+function YNode(edge, lchild, rchild) {
+    Node.call(this, lchild, rchild);
+    this.edge = edge;
+}
+
+YNode.prototype = Object.create(Node.prototype);
+
+YNode.prototype.locate = function (edge) {
+    if (this.edge.isAbove(edge.p)) return this.rchild.locate(edge);
+    if (this.edge.isBelow(edge.p)) return this.lchild.locate(edge);
+    if (edge.slope < this.edge.slope) return this.rchild.locate(edge);
+    return this.lchild.locate(edge);
 };
