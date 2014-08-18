@@ -8,6 +8,8 @@ function MonotoneMountain(a, b, points) {
     this.a = a;
     this.b = b;
 
+    this.positive = false;
+
     points.sort(compareX);
 
     var list = this.list = new DoublyLinkedList();
@@ -34,6 +36,9 @@ MonotoneMountain.prototype = {
             return;
         } else if (list.length < 3) return;
 
+        // triangles.push(this.poly());
+        // return;
+
         var convexPoints = [];
 
         this.positive = angle(p, this.b, this.a) >= 0;
@@ -55,6 +60,16 @@ MonotoneMountain.prototype = {
             this.addEar(convexPoints, prev);
             this.addEar(convexPoints, next);
         }
+    },
+
+    poly: function () {
+        var poly = [];
+        var p = this.list.head;
+        while (p) {
+            poly.push(p);
+            p = p.next;
+        }
+        return poly;
     },
 
     addEar: function (points, p) {

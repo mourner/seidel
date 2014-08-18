@@ -2,14 +2,8 @@
 
 module.exports = QueryGraph;
 
-var nodes = require('./nodes'),
-    YNode = nodes.YNode,
-    XNode = nodes.XNode,
-    Sink = nodes.Sink;
-
-function QueryGraph(head, map) {
+function QueryGraph(head) {
     this.head = Sink.get(head);
-    this.map = map;
 }
 
 QueryGraph.prototype = {

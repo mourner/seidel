@@ -7,14 +7,14 @@ var Trapezoid = require('./trapezoid'),
     Edge = require('./edge'),
     QueryGraph = require('./querygraph');
 
-function TrapezoidalMap() {
-    this.items = [];
+function TrapezoidalMap(edges) {
 
     var top = new Edge(new Point(-Infinity, Infinity), new Point(Infinity, Infinity)),
         bottom = new Edge(new Point(-Infinity, -Infinity), new Point(Infinity, -Infinity));
 
     this.root = new Trapezoid(bottom.p, top.q, top, bottom);
 
+    this.items = [];
     this.items.push(this.root);
 
     this.queryGraph = new QueryGraph(this.root);
@@ -146,5 +146,22 @@ TrapezoidalMap.prototype = {
         this.items.push(t3);
 
         this.queryGraph.case4(t.sink, e, t1, t2, t3);
+    },
+
+    collectPoints: function () {
+        var i, t,
+            len = this.items.length;
+
+        // Mark outside trapezoids w/ depth-first search
+        for (i = 0; i < len; i++) {
+            t = this.items[i];
+            if (!t.removed && (t.top === this.root.top || t.bottom === this.root.bottom)) t.markOutside();
+        }
+
+        // Collect interior trapezoids
+        for (i = 0; i < len; i++) {
+            t = this.items[i];
+            if (!t.removed && !t.outside) t.addPoints();
+        }
     }
 };

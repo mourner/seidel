@@ -7,8 +7,15 @@ function Trapezoid(leftPoint, rightPoint, top, bottom) {
     this.rightPoint = rightPoint;
     this.top = top;
     this.bottom = bottom;
-    this.inside = true;
+
+    this.outside = false;
     this.removed = false;
+    this.sink = null;
+
+    this.upperLeft = null;
+    this.upperRight = null;
+    this.lowerLeft = null;
+    this.lowerRight = null;
 }
 
 Trapezoid.prototype = {
@@ -32,13 +39,14 @@ Trapezoid.prototype = {
         this.updateRight(ur, lr);
     },
 
-    trimNeighbors: function () {
-        if (this.inside) {
-            this.inside = false;
-            if (this.upperLeft) this.upperLeft.trimNeighbors();
-            if (this.lowerLeft) this.lowerLeft.trimNeighbors();
-            if (this.upperRight) this.upperRight.trimNeighbors();
-            if (this.lowerRight) this.lowerRight.trimNeighbors();
+    markOutside: function () {
+        // TODO find a faster way other than recursive flood fill
+        if (!this.outside) {
+            this.outside = true;
+            if (this.upperLeft) this.upperLeft.markOutside();
+            if (this.lowerLeft) this.lowerLeft.markOutside();
+            if (this.upperRight) this.upperRight.markOutside();
+            if (this.lowerRight) this.lowerRight.markOutside();
         }
     },
 
