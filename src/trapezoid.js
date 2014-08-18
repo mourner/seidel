@@ -40,13 +40,17 @@ Trapezoid.prototype = {
     },
 
     markOutside: function () {
-        // TODO find a faster way other than recursive flood fill
-        if (!this.outside) {
-            this.outside = true;
-            if (this.upperLeft) this.upperLeft.markOutside();
-            if (this.lowerLeft) this.lowerLeft.markOutside();
-            if (this.upperRight) this.upperRight.markOutside();
-            if (this.lowerRight) this.lowerRight.markOutside();
+        var stack = [this];
+
+        while (stack.length) {
+            var t = stack.pop();
+            if (!t.outside) {
+                t.outside = true;
+                if (t.upperLeft) stack.push(t.upperLeft);
+                if (t.lowerLeft) stack.push(t.lowerLeft);
+                if (t.upperRight) stack.push(t.upperRight);
+                if (t.lowerRight) stack.push(t.lowerRight);
+            }
         }
     },
 
