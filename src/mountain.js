@@ -1,12 +1,12 @@
 'use strict';
 
-module.exports = triangulate;
+module.exports = triangulateMountain;
 
 var DoublyLinkedList = require('./dlinkedlist');
 
 // triangulates a monotone mountain based on `edge`, adding resulting triangles to the `triangles` array
 
-function triangulate(edge, triangles) {
+function triangulateMountain(edge, triangles) {
     var list = new DoublyLinkedList(),
         a = edge.p,
         b = edge.q,
