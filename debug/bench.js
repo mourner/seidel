@@ -17,4 +17,9 @@ new Benchmark.Suite()
 .on('cycle', function(event) {
     console.log(String(event.target));
 })
+.on('complete', function(event) {
+	var slowest = this.filter('slowest')[0],
+		fastest = this.filter('fastest')[0];
+	console.log(fastest.name + ' is ' + Math.round(100 * (fastest.hz / slowest.hz - 1)) + '% faster than ' + slowest.name);
+})
 .run();
