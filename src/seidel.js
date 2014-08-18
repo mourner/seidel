@@ -5,22 +5,21 @@ module.exports = triangulate;
 var Point = require('./point'),
     Edge = require('./edge'),
     TrapezoidalMap = require('./trapezoidalmap'),
-    MonotoneMountain = require('./monotonemountain');
+    triangulateMountain = require('./mountain');
 
 // Build the trapezoidal map and query graph & return triangles
 function triangulate(points) {
 
     var triangles = [],
         edges = [],
-        i, j, p, q, len, edge, mountain;
+        i, j, p, q, len, mountain;
 
     // build a set of edges from points
     for (i = 0, len = points.length; i < len; i++) {
         j = i < len - 1 ? i + 1 : 0;
         p = shearTransform(points[i]);
         q = shearTransform(points[j]);
-        edge = p.x > q.x ? new Edge(q, p) : new Edge(p, q);
-        edges.push(edge);
+        edges.push(p.x > q.x ? new Edge(q, p) : new Edge(p, q));
     }
     // shuffle(edges);
 
@@ -33,12 +32,7 @@ function triangulate(points) {
 
     // Generate the triangles
     for (i = 0; i < edges.length; i++) {
-        edge = edges[i];
-
-        if (edge.mpoints.length) {
-            mountain = new MonotoneMountain(edge.p, edge.q, edge.mpoints);
-            mountain.triangulate(triangles);
-        }
+        if (edges[i].mpoints.length) triangulateMountain(edges[i], triangles);
     }
 
     return triangles;
