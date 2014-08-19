@@ -168,16 +168,12 @@ TrapezoidalMap.prototype = {
         var i, t,
             len = this.items.length;
 
-        // Mark outside trapezoids w/ depth-first search
+        // Mark outside trapezoids; collect interior monotone mountain points
         for (i = 0; i < len; i++) {
             t = this.items[i];
-            if (!t.removed && (t.top === this.root.top || t.bottom === this.root.bottom)) t.markOutside();
-        }
-
-        // Collect interior trapezoids
-        for (i = 0; i < len; i++) {
-            t = this.items[i];
-            if (!t.removed && !t.outside) t.addPoints();
+            if (t.removed || t.outside) continue;
+            if (t.top === this.root.top || t.bottom === this.root.bottom) t.markOutside();
+            else t.addPoints();
         }
     }
 };

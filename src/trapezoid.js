@@ -39,6 +39,7 @@ Trapezoid.prototype = {
         this.updateRight(ur, lr);
     },
 
+    // mark outside trapezoids with non-recursive depth-first search
     markOutside: function () {
         var stack = [this];
 
