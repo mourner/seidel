@@ -35,6 +35,10 @@ TrapezoidalMap.prototype = {
         this.tcross = null;
     },
 
+    locateEdge: function (edge) {
+        //...
+    },
+
     splitTrapezoid: function (t, edge) {
          // Remove old trapezoid
         t.removed = true;

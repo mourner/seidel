@@ -23,12 +23,7 @@ function triangulate(points) {
     }
     // shuffle(edges);
 
-    var map = new TrapezoidalMap();
-
-    for (var i = 0; i < edges.length; i++) {
-        map.addEdge(edges[i]);
-    }
-    map.collectPoints();
+    trapezoidize(edges);
 
     // Generate the triangles
     for (i = 0; i < edges.length; i++) {
@@ -36,6 +31,50 @@ function triangulate(points) {
     }
 
     return triangles;
+}
+
+function trapezoidize(edges) {
+    var map = new TrapezoidalMap();
+
+    var n = edges.length,
+        k = logStar(n);
+
+    map.addEdge(edges[0]);
+
+    for (var h = 0; h < k; h++) {
+        for (var i = N(h, n), m = N(h + 1, n); i < m; i++) {
+            map.addEdge(edges[i]);
+        }
+        for (var j = m; j < n; j++) {
+            map.locateEdge(edges[j]);
+        }
+    }
+    for (var i = N(k, n); i < n; i++) {
+        map.addEdge(edges[i]);
+    }
+
+    map.collectPoints();
+}
+
+function logStar(n) {
+    var k = Math.log(n),
+        i = 0;
+    while (k >= 1) {
+        k = Math.log(k);
+        i++;
+    }
+    return i || 1;
+}
+
+function logI(i, n) {
+    for (var k = 0; k < i; k++) {
+        n = Math.log(n);
+    }
+    return n;
+}
+
+function N(h, n) {
+    return Math.ceil(n / logI(h, n)) || 1;
 }
 
 // Shear transform. May effect numerical robustness
