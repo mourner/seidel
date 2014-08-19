@@ -86,6 +86,7 @@ TrapezoidalMap.prototype = {
 
         this.bcross = t.bottom;
         this.tcross = t.top;
+
         e.above = t2;
         e.below = t3;
 
@@ -94,9 +95,9 @@ TrapezoidalMap.prototype = {
         this.items.push(t1, t2, t3);
     },
 
-    /*  _________
-       |____|    |
-       |____|____|
+    /*  ________
+       |________|
+       |________|
     */
     case3: function (t, e) {
         var lp = e.p.x === t.leftPoint.x ?  e.p : t.leftPoint,
@@ -125,15 +126,16 @@ TrapezoidalMap.prototype = {
 
         this.bcross = t.bottom;
         this.tcross = t.top;
+
         e.above = t1;
         e.below = t2;
 
         this.queryGraph.case3(t.sink, e, t1, t2);
     },
 
-    /*  ________
-       |________|
-       |________|
+    /*  _________
+       |____|    |
+       |____|____|
     */
     case4: function (t, e) {
         var lp = e.p.x === t.leftPoint.x ? e.p : t.leftPoint,
@@ -168,12 +170,20 @@ TrapezoidalMap.prototype = {
         var i, t,
             len = this.items.length;
 
-        // Mark outside trapezoids; collect interior monotone mountain points
+        // after finding the first outside trapezoid that has a linked inside trapezoid below,
+        // mark other inside trapezoids (with depth-first search)
         for (i = 0; i < len; i++) {
             t = this.items[i];
-            if (t.removed || t.outside) continue;
-            if (t.top === this.root.top || t.bottom === this.root.bottom) t.markOutside();
-            else t.addPoints();
+            if (!t.removed && (t.top === this.root.top || t.bottom === this.root.bottom) && t.bottom.below) {
+                t.bottom.below.markInside();
+                break;
+            }
+        }
+
+        // collect interior monotone mountain points
+        for (i = 0; i < len; i++) {
+            t = this.items[i];
+            if (!t.removed && t.inside) t.addPoints();
         }
     }
 };

@@ -8,7 +8,7 @@ function Trapezoid(leftPoint, rightPoint, top, bottom) {
     this.top = top;
     this.bottom = bottom;
 
-    this.outside = false;
+    this.inside = false;
     this.removed = false;
     this.sink = null;
 
@@ -39,14 +39,14 @@ Trapezoid.prototype = {
         this.updateRight(ur, lr);
     },
 
-    // mark outside trapezoids with non-recursive depth-first search
-    markOutside: function () {
+    // mark inside trapezoids with non-recursive depth-first search
+    markInside: function () {
         var stack = [this];
 
         while (stack.length) {
             var t = stack.pop();
-            if (!t.outside) {
-                t.outside = true;
+            if (!t.inside) {
+                t.inside = true;
                 if (t.upperLeft) stack.push(t.upperLeft);
                 if (t.lowerLeft) stack.push(t.lowerLeft);
                 if (t.upperRight) stack.push(t.upperRight);

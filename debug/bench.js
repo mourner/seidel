@@ -11,7 +11,7 @@ console.log('dude shape:');
 
 new Benchmark.Suite()
 .add('seidel', function () {
-	seidel(dude);
+	seidel([dude]);
 })
 .add('poly2tri', function () {
 	var swctx = new poly2tri.SweepContext(dude.map(function (p) { return new poly2tri.Point(p[0], p[1]); }));
@@ -33,7 +33,7 @@ console.log('\nsimple L-shape:');
 
 new Benchmark.Suite()
 .add('seidel', function () {
-	seidel(simple);
+	seidel([simple]);
 })
 .add('poly2tri', function () {
 	var swctx = new poly2tri.SweepContext(simple.map(function (p) { return new poly2tri.Point(p[0], p[1]); }));
@@ -55,7 +55,7 @@ console.log('\n4-point building:');
 
 new Benchmark.Suite()
 .add('seidel', function () {
-	seidel(building);
+	seidel([building]);
 })
 .add('poly2tri', function () {
 	var swctx = new poly2tri.SweepContext(building.map(function (p) { return new poly2tri.Point(p[0], p[1]); }));

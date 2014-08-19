@@ -7,13 +7,12 @@ Still yet to be implemented:
 
 - true nlog*(n) randomized algorithm (eliminating current nlog(n) bottlenecks)
 - handling degenerate cases (segments touching edges, edges touching edges)
-- hole support
 - test coverage
 
 #### Usage
 
 ```js
-var points = [[10, 0], [0, 50], [60, 60], [70, 10]];
+var points = [[[10, 0], [0, 50], [60, 60], [70, 10]]];
 seidel(points); // returns an array of triangles (arrays of 3 point objects each)
 ```
 

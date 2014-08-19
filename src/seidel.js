@@ -8,19 +8,25 @@ var Point = require('./point'),
     triangulateMountain = require('./mountain');
 
 // Build the trapezoidal map and query graph & return triangles
-function triangulate(points) {
+function triangulate(rings) {
 
     var triangles = [],
         edges = [],
-        i, j, p, q, len;
+        i, j, k, points, p, q, len;
 
-    // build a set of edges from points
-    for (i = 0, len = points.length; i < len; i++) {
-        j = i < len - 1 ? i + 1 : 0;
-        p = i ? q : shearTransform(points[i]);
-        q = shearTransform(points[j]);
-        edges.push(p.x > q.x ? new Edge(q, p) : new Edge(p, q));
+    for (k = 0; k < rings.length; k++) {
+
+        points = rings[k];
+
+        // build a set of edges from points
+        for (i = 0, len = points.length; i < len; i++) {
+            j = i < len - 1 ? i + 1 : 0;
+            p = i ? q : shearTransform(points[i]);
+            q = shearTransform(points[j]);
+            edges.push(p.x > q.x ? new Edge(q, p) : new Edge(p, q));
+        }
     }
+
     // shuffle(edges);
 
     var map = new TrapezoidalMap();
