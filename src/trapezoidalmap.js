@@ -49,6 +49,10 @@ TrapezoidalMap.prototype = {
         else this.case4(t, edge);
     },
 
+    /*  _________
+       |  |___|  |
+       |__|___|__|
+    */
     case1: function (t, e) {
         var t1 = new Trapezoid(t.leftPoint, e.p, t.top, t.bottom),
             t2 = new Trapezoid(e.p, e.q, t.top, e),
@@ -65,6 +69,10 @@ TrapezoidalMap.prototype = {
         this.items.push(t1, t2, t3, t4);
     },
 
+    /*  _________
+       |    |____|
+       |____|____|
+    */
     case2: function (t, e) {
         var rp = e.q.x == t.rightPoint.x ? e.q : t.rightPoint;
 
@@ -86,6 +94,10 @@ TrapezoidalMap.prototype = {
         this.items.push(t1, t2, t3);
     },
 
+    /*  _________
+       |____|    |
+       |____|____|
+    */
     case3: function (t, e) {
         var lp = e.p.x == t.leftPoint.x ?  e.p : t.leftPoint,
             rp = e.q.x == t.rightPoint.x ? e.q : t.rightPoint,
@@ -119,6 +131,10 @@ TrapezoidalMap.prototype = {
         this.queryGraph.case3(t.sink, e, t1, t2);
     },
 
+    /*  ________
+       |________|
+       |________|
+    */
     case4: function (t, e) {
         var lp = e.p.x == t.leftPoint.x ? e.p : t.leftPoint,
             t1, t2, t3;
