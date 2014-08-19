@@ -8,8 +8,8 @@ function QueryGraph(head) {
 
 QueryGraph.prototype = {
 
-    locate: function (edge) {
-        return this.head.locate(edge).trapezoid;
+    locate: function (point, slope) {
+        return this.head.locate(point, slope).trapezoid;
     },
 
     replace: function (sink, node) {
@@ -69,11 +69,11 @@ YNode.prototype.replace = function (node) {
     }
 }
 
-YNode.prototype.locate = function (edge) {
-    if (this.edge.isAbove(edge.p)) return this.rchild.locate(edge);
-    if (this.edge.isBelow(edge.p)) return this.lchild.locate(edge);
-    if (edge.slope < this.edge.slope) return this.rchild.locate(edge);
-    return this.lchild.locate(edge);
+YNode.prototype.locate = function (point, slope) {
+    if (this.edge.isAbove(point)) return this.rchild.locate(point, slope);
+    if (this.edge.isBelow(point)) return this.lchild.locate(point, slope);
+    if (slope < this.edge.slope) return this.rchild.locate(point, slope);
+    return this.lchild.locate(point, slope);
 };
 
 
@@ -86,12 +86,12 @@ function XNode(point, lchild, rchild) {
     lchild.parents.push(this);
     rchild.parents.push(this);
 
-    this.x = point.x;
+    this.point = point;
 }
 
-XNode.prototype.locate = function (edge) {
-    if (edge.p.x >= this.x) return this.rchild.locate(edge);
-    return this.lchild.locate(edge);
+XNode.prototype.locate = function (point, slope) {
+    if (point.x >= this.point.x) return this.rchild.locate(point, slope);
+    return this.lchild.locate(point, slope);
 };
 
 XNode.prototype.replace = YNode.prototype.replace;

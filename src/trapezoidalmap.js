@@ -22,7 +22,7 @@ function TrapezoidalMap(edges) {
 
 TrapezoidalMap.prototype = {
     addEdge: function (edge) {
-        var t = this.queryGraph.locate(edge);
+        var t = this.queryGraph.locate(edge.p, edge.slope);
 
         this.splitTrapezoid(t, edge);
 
