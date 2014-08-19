@@ -29,7 +29,7 @@ function triangulateMountain(edge, triangles) {
     // triangles.push(monoPoly(list)); return;
 
     var convexPoints = [],
-        positive = angle(p, b, a) >= 0;
+        positive = cross(p, b, a) >= 0;
 
     while (p !== list.tail) {
         addEar(convexPoints, p, list, positive);
@@ -62,18 +62,16 @@ function addEar(points, p, list, positive) {
 }
 
 function isConvex(p, positive) {
-    return positive === (angle(p.next, p.prev, p) >= 0);
+    return positive === (cross(p.next, p.prev, p) >= 0);
 }
 
-function angle(a, b, c) {
+function cross(a, b, c) {
     var x1 = a.x - c.x,
         x2 = b.x - c.x,
         y1 = a.y - c.y,
         y2 = b.y - c.y;
 
-    return Math.atan2(
-        x1 * y2 - y1 * x2,
-        x1 * x2 + y1 * y2);
+    return x1 * y2 - y1 * x2;
 }
 
 // function monoPoly(list) {
