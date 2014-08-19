@@ -55,8 +55,8 @@
             if (fill) ctx.fillStyle = fill;
 
             for (var i = 0; i < points.length; i++) {
-                var x = ((points[i].x || points[i][0]) - minX) * ratio + 5,
-                    y = ((points[i].y || points[i][1]) - minY) * ratio + 5;
+                var x = ((points[i].x || points[i][0] || 0) - minX) * ratio + 5,
+                    y = ((points[i].y || points[i][1] || 0) - minY) * ratio + 5;
                 if (i === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             }
