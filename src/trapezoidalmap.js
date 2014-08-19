@@ -5,7 +5,9 @@ module.exports = TrapezoidalMap;
 var Trapezoid = require('./trapezoid'),
     Point = require('./point'),
     Edge = require('./edge'),
-    QueryGraph = require('./querygraph');
+    QueryGraph = require('./querygraph'),
+    util = require('./util');
+
 
 function TrapezoidalMap() {
 
@@ -27,7 +29,7 @@ TrapezoidalMap.prototype = {
         this.splitTrapezoid(t, edge);
 
         while (edge.q.x > t.rightPoint.x) {
-            t = edge.isAbove(t.rightPoint) ? t.upperRight : t.lowerRight;
+            t = util.edgeAbove(edge, t.rightPoint) ? t.upperRight : t.lowerRight;
             this.splitTrapezoid(t, edge);
         }
 

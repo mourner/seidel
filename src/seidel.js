@@ -7,6 +7,7 @@ var Point = require('./point'),
     TrapezoidalMap = require('./trapezoidalmap'),
     triangulateMountain = require('./mountain');
 
+
 // Build the trapezoidal map and query graph & return triangles
 function triangulate(rings) {
 

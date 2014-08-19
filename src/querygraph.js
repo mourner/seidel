@@ -2,6 +2,9 @@
 
 module.exports = QueryGraph;
 
+var util = require('./util');
+
+
 function QueryGraph(head) {
     this.head = getSink(head);
 }
@@ -9,7 +12,8 @@ function QueryGraph(head) {
 QueryGraph.prototype = {
 
     locate: function (point, slope) {
-        var node = this.head;
+        var node = this.head,
+            orient;
 
         while (node) {
             if (node.trapezoid) return node.trapezoid;
@@ -18,9 +22,10 @@ QueryGraph.prototype = {
                 node = point.x >= node.point.x ? node.rchild : node.lchild;
 
             } else if (node.edge) {
+                orient = util.edgeOrient(node.edge, point);
                 node =
-                    node.edge.isAbove(point) ? node.rchild :
-                    node.edge.isBelow(point) ? node.lchild :
+                    orient < 0 ? node.rchild :
+                    orient > 0 ? node.lchild :
                     slope < node.edge.slope ? node.rchild : node.lchild;
             }
         }

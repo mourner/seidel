@@ -2,7 +2,9 @@
 
 module.exports = triangulateMountain;
 
-var DoublyLinkedList = require('./dlinkedlist');
+var DoublyLinkedList = require('./dlinkedlist'),
+    util = require('./util');
+
 
 // triangulates a monotone mountain based on `edge`, adding resulting triangles to the `triangles` array
 
@@ -29,7 +31,7 @@ function triangulateMountain(edge, triangles) {
     // triangles.push(monoPoly(list)); return;
 
     var convexPoints = [],
-        positive = cross(p, b, a) >= 0;
+        positive = util.cross(p, b, a) >= 0;
 
     while (p !== list.tail) {
         addEar(convexPoints, p, list, positive);
@@ -66,16 +68,7 @@ function addEar(points, p, list, positive) {
 }
 
 function isConvex(p, positive) {
-    return positive === (cross(p.next, p.prev, p) >= 0);
-}
-
-function cross(a, b, c) {
-    var x1 = a.x - c.x,
-        x2 = b.x - c.x,
-        y1 = a.y - c.y,
-        y2 = b.y - c.y;
-
-    return x1 * y2 - y1 * x2;
+    return positive === (util.cross(p.next, p.prev, p) >= 0);
 }
 
 // function monoPoly(list) {
