@@ -7,6 +7,7 @@ var DoublyLinkedList = require('./dlinkedlist');
 // triangulates a monotone mountain based on `edge`, adding resulting triangles to the `triangles` array
 
 function triangulateMountain(edge, triangles) {
+
     var list = new DoublyLinkedList(),
         a = edge.p,
         b = edge.q,
@@ -22,14 +23,10 @@ function triangulateMountain(edge, triangles) {
 
     var p = list.head.next;
 
-    if (list.length === 3) {
-        triangles.push([a, p, b]);
-        return;
+    if (list.length < 3) return;
+    else if (list.length === 3) { triangles.push([a, p, b]); return; }
 
-    } else if (list.length < 3) return;
-
-    // triangles.push(this.monoPoly(list));
-    // return;
+    // triangles.push(monoPoly(list)); return;
 
     var convexPoints = [],
         positive = angle(p, b, a) >= 0;
