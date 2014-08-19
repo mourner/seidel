@@ -42,25 +42,27 @@
         var ratio = (canvas.height - 5) / height;
         canvas.width = canvas.height * width / height + 5;
 
-        ctx.strokeStyle = 'red';
-        ctx.fillStyle = 'rgba(255,255,0,0.1)';
-
         for (var i = 0; i < triangles.length; i++) {
-            drawPoly(triangles[i]);
+            drawPoly(triangles[i], 'rgba(255,0,0,0.5)', 'rgba(255,255,0,0.07)');
         }
 
-        function drawPoly(points, color) {
+        drawPoly(testPoints, 'black');
+
+        function drawPoly(points, color, fill) {
             ctx.beginPath();
 
+            ctx.strokeStyle = color;
+            if (fill) ctx.fillStyle = fill;
+
             for (var i = 0; i < points.length; i++) {
-                var x = (points[i].x - minX) * ratio + 5,
-                    y = (points[i].y - minY) * ratio + 5;
+                var x = ((points[i].x || points[i][0]) - minX) * ratio + 5,
+                    y = ((points[i].y || points[i][1]) - minY) * ratio + 5;
                 if (i === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             }
             ctx.closePath();
             ctx.stroke();
-            ctx.fill();
+            if (fill) ctx.fill();
         }
     </script>
 </body>
