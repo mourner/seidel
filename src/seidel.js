@@ -17,7 +17,7 @@ function triangulate(points) {
     // build a set of edges from points
     for (i = 0, len = points.length; i < len; i++) {
         j = i < len - 1 ? i + 1 : 0;
-        p = shearTransform(points[i]);
+        p = i ? q : shearTransform(points[i]);
         q = shearTransform(points[j]);
         edges.push(p.x > q.x ? new Edge(q, p) : new Edge(p, q));
     }
