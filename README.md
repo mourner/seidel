@@ -1,7 +1,9 @@
 
 A JavaScript implementation of polygon triangulation based on [Seidel's incremental randomized algorithm](https://www.cs.princeton.edu/courses/archive/fall05/cos528/handouts/A%20Simple%20and%20fast.pdf).
-Initially ported from from earlier versions of [poly2tri](https://code.google.com/p/poly2tri/) by Mason Green,
-it since has been heavily optimized.
+Initially ported from earlier Scala/Python versions of [poly2tri](https://code.google.com/p/poly2tri/) by Mason Green,
+it since has been heavily optimized and improved (including hole support).
+
+![](https://cloud.githubusercontent.com/assets/25395/3972752/a028e4c8-27e0-11e4-8bc6-134bd87f4655.png)
 
 Still yet to be implemented:
 
