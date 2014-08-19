@@ -9,106 +9,78 @@ function QueryGraph(head) {
 QueryGraph.prototype = {
 
     locate: function (point, slope) {
-        return this.head.locate(point, slope).trapezoid;
-    },
+        var node = this.head;
 
-    replace: function (sink, node) {
-        if (sink.parents.length) {
-            node.replace(sink);
-        } else {
-            this.head = node;
+        while (node) {
+            if (node.trapezoid) return node.trapezoid;
+
+            if (node.point) {
+                node = point.x >= node.point.x ? node.rchild : node.lchild;
+
+            } else if (node.edge) {
+                node =
+                    node.edge.isAbove(point) ? node.rchild :
+                    node.edge.isBelow(point) ? node.lchild :
+                    slope < node.edge.slope ? node.rchild : node.lchild;
+            }
         }
     },
 
     case1: function (sink, edge, t1, t2, t3, t4) {
-        var yNode = new YNode(edge, getSink(t2), getSink(t3)),
-            qNode = new XNode(edge.q, yNode, getSink(t4)),
-            pNode = new XNode(edge.p, getSink(t1), qNode);
-        this.replace(sink, pNode);
+        var yNode = setYNode(new Node(), edge, getSink(t2), getSink(t3)),
+            qNode = setXNode(new Node(), edge.q, yNode, getSink(t4));
+        setXNode(sink, edge.p, getSink(t1), qNode);
     },
 
     case2: function (sink, edge, t1, t2, t3) {
-        var yNode = new YNode(edge, getSink(t2), getSink(t3)),
-            pNode = new XNode(edge.p, getSink(t1), yNode);
-        this.replace(sink, pNode);
+        var yNode = setYNode(new Node(), edge, getSink(t2), getSink(t3));
+        setXNode(sink, edge.p, getSink(t1), yNode);
     },
 
     case3: function (sink, edge, t1, t2) {
-        var yNode = new YNode(edge, getSink(t1), getSink(t2));
-        this.replace(sink, yNode);
+        setYNode(sink, edge, getSink(t1), getSink(t2));
     },
 
     case4: function (sink, edge, t1, t2, t3) {
-        var yNode = new YNode(edge, getSink(t1), getSink(t2)),
-            qNode = new XNode(edge.q, yNode, getSink(t3));
-        this.replace(sink, qNode);
+        var yNode = setYNode(new Node(), edge, getSink(t1), getSink(t2));
+        setXNode(sink, edge.q, yNode, getSink(t3));
     }
 };
 
 
-function YNode(edge, lchild, rchild) {
-    this.parents = [];
-
-    this.lchild = lchild;
-    this.rchild = rchild;
-
-    lchild.parents.push(this);
-    rchild.parents.push(this);
-
-    this.edge = edge;
+function Node() {
+    this.point = null;
+    this.edge = null;
+    this.lchild = null;
+    this.rchild = null;
+    this.trapezoid = null;
 }
 
-YNode.prototype.replace = function (node) {
-    for (var i = 0; i < node.parents.length; i++) {
-        var parent = node.parents[i];
-
-        if (parent.lchild === node) parent.lchild = this;
-        else parent.rchild = this;
-
-        this.parents.push(parent);
-    }
-};
-
-YNode.prototype.locate = function (point, slope) {
-    if (this.edge.isAbove(point)) return this.rchild.locate(point, slope);
-    if (this.edge.isBelow(point)) return this.lchild.locate(point, slope);
-    if (slope < this.edge.slope) return this.rchild.locate(point, slope);
-    return this.lchild.locate(point, slope);
-};
-
-
-function XNode(point, lchild, rchild) {
-    this.parents = [];
-
-    this.lchild = lchild;
-    this.rchild = rchild;
-
-    lchild.parents.push(this);
-    rchild.parents.push(this);
-
-    this.point = point;
+function setYNode(node, edge, lchild, rchild) {
+    node.edge = edge;
+    node.lchild = lchild;
+    node.rchild = rchild;
+    node.trapezoid = null;
+    return node;
 }
 
-XNode.prototype.locate = function (point, slope) {
-    if (point.x >= this.point.x) return this.rchild.locate(point, slope);
-    return this.lchild.locate(point, slope);
-};
-
-XNode.prototype.replace = YNode.prototype.replace;
-
-
-function Sink(trapezoid) {
-    this.parents = [];
-    this.trapezoid = trapezoid;
-    trapezoid.sink = this;
+function setXNode(node, point, lchild, rchild) {
+    node.point = point;
+    node.lchild = lchild;
+    node.rchild = rchild;
+    node.trapezoid = null;
+    return node;
 }
 
-Sink.prototype.locate = function () {
-    return this;
-};
+
+function setSink(node, trapezoid) {
+    node.trapezoid = trapezoid;
+    trapezoid.sink = node;
+    return node;
+}
 
 function getSink(trapezoid) {
-    return trapezoid.sink || new Sink(trapezoid);
+    return trapezoid.sink || setSink(new Node(), trapezoid);
 }
 
 
