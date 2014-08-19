@@ -12,7 +12,7 @@ function triangulate(points) {
 
     var triangles = [],
         edges = [],
-        i, j, p, q, len, mountain;
+        i, j, p, q, len;
 
     // build a set of edges from points
     for (i = 0, len = points.length; i < len; i++) {
@@ -25,7 +25,7 @@ function triangulate(points) {
 
     var map = new TrapezoidalMap();
 
-    for (var i = 0; i < edges.length; i++) {
+    for (i = 0; i < edges.length; i++) {
         map.addEdge(edges[i]);
     }
     map.collectPoints();

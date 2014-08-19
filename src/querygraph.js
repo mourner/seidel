@@ -67,7 +67,7 @@ YNode.prototype.replace = function (node) {
 
         this.parents.push(parent);
     }
-}
+};
 
 YNode.prototype.locate = function (point, slope) {
     if (this.edge.isAbove(point)) return this.rchild.locate(point, slope);
@@ -109,6 +109,6 @@ Sink.prototype.locate = function () {
 
 function getSink(trapezoid) {
     return trapezoid.sink || new Sink(trapezoid);
-};
+}
 
 

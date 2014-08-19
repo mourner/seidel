@@ -7,7 +7,7 @@ var Trapezoid = require('./trapezoid'),
     Edge = require('./edge'),
     QueryGraph = require('./querygraph');
 
-function TrapezoidalMap(edges) {
+function TrapezoidalMap() {
 
     var top = new Edge(new Point(-Infinity, Infinity), new Point(Infinity, Infinity)),
         bottom = new Edge(new Point(-Infinity, -Infinity), new Point(Infinity, -Infinity));
@@ -74,7 +74,7 @@ TrapezoidalMap.prototype = {
        |____|____|
     */
     case2: function (t, e) {
-        var rp = e.q.x == t.rightPoint.x ? e.q : t.rightPoint;
+        var rp = e.q.x === t.rightPoint.x ? e.q : t.rightPoint;
 
         var t1 = new Trapezoid(t.leftPoint, e.p, t.top, t.bottom),
             t2 = new Trapezoid(e.p, rp, t.top, e),
@@ -99,8 +99,8 @@ TrapezoidalMap.prototype = {
        |____|____|
     */
     case3: function (t, e) {
-        var lp = e.p.x == t.leftPoint.x ?  e.p : t.leftPoint,
-            rp = e.q.x == t.rightPoint.x ? e.q : t.rightPoint,
+        var lp = e.p.x === t.leftPoint.x ?  e.p : t.leftPoint,
+            rp = e.q.x === t.rightPoint.x ? e.q : t.rightPoint,
             t1, t2;
 
         if (this.tcross === t.top) {
@@ -136,7 +136,7 @@ TrapezoidalMap.prototype = {
        |________|
     */
     case4: function (t, e) {
-        var lp = e.p.x == t.leftPoint.x ? e.p : t.leftPoint,
+        var lp = e.p.x === t.leftPoint.x ? e.p : t.leftPoint,
             t1, t2, t3;
 
         if (this.tcross === t.top) {
