@@ -2,6 +2,8 @@
 
 module.exports = Trapezoid;
 
+var Point = require('./point');
+
 function Trapezoid(leftPoint, rightPoint, top, bottom) {
     this.leftPoint = leftPoint;
     this.rightPoint = rightPoint;
@@ -63,10 +65,14 @@ Trapezoid.prototype = {
     },
 
     addPoints: function () {
-        if (this.leftPoint !== this.bottom.p) this.bottom.mpoints.push(this.leftPoint.clone());
-        if (this.rightPoint !== this.bottom.q) this.bottom.mpoints.push(this.rightPoint.clone());
+        if (this.leftPoint !== this.bottom.p) this.bottom.mpoints.push(clone(this.leftPoint));
+        if (this.rightPoint !== this.bottom.q) this.bottom.mpoints.push(clone(this.rightPoint));
 
-        if (this.leftPoint !== this.top.p) this.top.mpoints.push(this.leftPoint.clone());
-        if (this.rightPoint !== this.top.q) this.top.mpoints.push(this.rightPoint.clone());
+        if (this.leftPoint !== this.top.p) this.top.mpoints.push(clone(this.leftPoint));
+        if (this.rightPoint !== this.top.q) this.top.mpoints.push(clone(this.rightPoint));
     }
 };
+
+function clone(p) {
+    return new Point(p.x, p.y);
+}
