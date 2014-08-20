@@ -24,14 +24,14 @@ it (while still having some nice room for further improvement):
 $ node debug/bench.js
 
 dude shape (94 vertices)
-seidel x 7,952 ops/sec ±0.51% (100 runs sampled)
-poly2tri x 4,243 ops/sec ±0.79% (97 runs sampled)
-seidel is 87% faster than poly2tri
+seidel x 8,047 ops/sec ±0.49% (101 runs sampled)
+poly2tri x 4,232 ops/sec ±1.80% (98 runs sampled)
+seidel is 90% faster than poly2tri
 
 monkey (1204 vertices)
-seidel x 467 ops/sec ±0.71% (91 runs sampled)
-poly2tri x 294 ops/sec ±0.91% (91 runs sampled)
-seidel is 59% faster than poly2tri
+seidel x 482 ops/sec ±0.36% (93 runs sampled)
+poly2tri x 289 ops/sec ±0.74% (94 runs sampled)
+seidel is 67% faster than poly2tri
 ```
 
 Another advantage of Seidel's algorithm is that it's potentially more forgiving to bad input data, so the goal is to

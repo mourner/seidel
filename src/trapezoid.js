@@ -65,11 +65,16 @@ Trapezoid.prototype = {
                util.edgeBelow(this.bottom, point);
     },
 
-    addPoints: function () {
-        if (this.leftPoint !== this.bottom.p) this.bottom.mpoints.push(util.clone(this.leftPoint));
-        if (this.rightPoint !== this.bottom.q) this.bottom.mpoints.push(util.clone(this.rightPoint));
+    addPoint: function (array, point) {
+        var len = array.length;
+        if (!len || util.neq(array[len - 1], point)) array.push(util.clone(point));
+    },
 
-        if (this.leftPoint !== this.top.p) this.top.mpoints.push(util.clone(this.leftPoint));
-        if (this.rightPoint !== this.top.q) this.top.mpoints.push(util.clone(this.rightPoint));
+    addPoints: function () {
+        if (this.leftPoint !== this.bottom.p) this.addPoint(this.bottom.mpoints, this.leftPoint);
+        if (this.rightPoint !== this.bottom.q) this.addPoint(this.bottom.mpoints, this.rightPoint);
+
+        if (this.leftPoint !== this.top.p) this.addPoint(this.top.mpoints, this.leftPoint);
+        if (this.rightPoint !== this.top.q) this.addPoint(this.top.mpoints, this.rightPoint);
     }
 };

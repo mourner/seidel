@@ -19,9 +19,9 @@ function triangulateMountain(edge, triangles) {
 
     list.add(a);
     for (var i = 0; i < points.length; i++) {
-        if (neq(points[i], list.tail)) list.add(points[i]);
+        if (util.neq(points[i], list.tail)) list.add(points[i]);
     }
-    if (neq(b, list.tail)) list.add(b);
+    if (util.neq(b, list.tail)) list.add(b);
 
     var p = list.head.next;
 
@@ -54,10 +54,6 @@ function triangulateMountain(edge, triangles) {
 
 function compareX(a, b) {
     return a.x - b.x;
-}
-
-function neq(p1, p2) {
-    return p1.x !== p2.x || p1.y !== p2.y;
 }
 
 function addEar(points, p, list, positive) {
