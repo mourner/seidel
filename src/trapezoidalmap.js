@@ -176,10 +176,9 @@ TrapezoidalMap.prototype = {
         // mark other inside trapezoids (with depth-first search)
         for (i = 0; i < len; i++) {
             t = this.items[i];
-            if (!t.removed && (t.top === this.root.top || t.bottom === this.root.bottom) && t.bottom.below) {
-                t.bottom.below.markInside();
-                break;
-            }
+            if (t.removed) continue;
+            if (t.top === this.root.top && t.bottom.below) { t.bottom.below.markInside(); break; }
+            if (t.bottom === this.root.bottom && t.top.above) { t.top.above.markInside(); break; }
         }
 
         // collect interior monotone mountain points
