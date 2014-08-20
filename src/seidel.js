@@ -13,7 +13,7 @@ function triangulate(rings) {
 
     var triangles = [],
         edges = [],
-        i, j, k, points, p, q, len;
+        i, j, k, points, p, q, len, done;
 
     for (k = 0; k < rings.length; k++) {
 
@@ -33,13 +33,15 @@ function triangulate(rings) {
     var map = new TrapezoidalMap();
 
     for (i = 0; i < edges.length; i++) {
-        map.addEdge(edges[i]);
+        done = map.addEdge(edges[i]);
+        if (!done) return null;
     }
     map.collectPoints();
 
     // Generate the triangles
     for (i = 0; i < edges.length; i++) {
-        if (edges[i].mpoints.length) triangulateMountain(edges[i], triangles);
+        if (edges[i].mpoints.length) done = triangulateMountain(edges[i], triangles);
+        if (!done) return null;
     }
 
     return triangles;

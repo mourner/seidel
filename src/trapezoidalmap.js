@@ -25,16 +25,20 @@ function TrapezoidalMap() {
 TrapezoidalMap.prototype = {
     addEdge: function (edge) {
         var t = this.queryGraph.locate(edge.p, edge.slope);
+        if (!t) return false;
 
         this.splitTrapezoid(t, edge);
 
         while (edge.q.x > t.rightPoint.x) {
             t = util.edgeAbove(edge, t.rightPoint) ? t.upperRight : t.lowerRight;
+            if (!t) return false;
             this.splitTrapezoid(t, edge);
         }
 
         this.bcross = null;
         this.tcross = null;
+
+        return true;
     },
 
     splitTrapezoid: function (t, edge) {
