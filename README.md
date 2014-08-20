@@ -18,13 +18,13 @@ sacrificing triangulation quality for raw speed.
 The current state of the art in JS polygon triangulation is [poly2tri.js](https://github.com/r3mi/poly2tri.js),
 which implements Constrained Delaunay Triangulation algorithm. It produces the best quality triangulation,
 and is quite fast, but its performance is still limited. Seidel's implementation already significantly surpasses
-it (while still having some nice room for further improvement):
+it:
 
-sample data | seidel | poly2tri | libtess | fastest vs 2nd fastest
---- | --- | --- | --- | ---
-Typical OSM building | 57,600 | 29,485 | 22,354 | seidel is 95% faster than poly2tri
-Dude shape | 7,692 | 4,046 | 4,530 | seidel is 70% faster than libtess
-Nazca monkey shape | 487 | 281 | 359 | seidel is 36% faster than libtess
+(ops/sec) | points | seidel | poly2tri | libtess | fastest vs 2nd fastest
+--- | --- | --- | --- | --- | ---
+OSM building | 15 | _57,600_ | _29,485_ | _22,354_ | seidel vs poly2tri, 95% faster
+dude shape | 94 | _7,692_ | _4,046_ | _4,530_ | seidel vs libtess, 70% faster
+nazca monkey | 1204 | _487_ | _281_ | _359_ | seidel vs libtess, 36% faster
 
 Another advantage of Seidel's algorithm is that it's potentially more forgiving to bad input data, so the goal is to
 handle as many bad data cases as possible, dropping the [JS Clipper](http://sourceforge.net/projects/jsclipper/) preprocessing
