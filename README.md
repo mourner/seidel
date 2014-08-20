@@ -20,19 +20,11 @@ which implements Constrained Delaunay Triangulation algorithm. It produces the b
 and is quite fast, but its performance is still limited. Seidel's implementation already significantly surpasses
 it (while still having some nice room for further improvement):
 
-```bash
-$ node debug/bench.js
-
-dude shape (94 vertices)
-seidel x 8,047 ops/sec ±0.49% (101 runs sampled)
-poly2tri x 4,232 ops/sec ±1.80% (98 runs sampled)
-seidel is 90% faster than poly2tri
-
-monkey (1204 vertices)
-seidel x 482 ops/sec ±0.36% (93 runs sampled)
-poly2tri x 289 ops/sec ±0.74% (94 runs sampled)
-seidel is 67% faster than poly2tri
-```
+sample data | seidel | poly2tri | libtess | fastest vs 2nd fastest
+--- | --- | --- | --- | ---
+Typical OSM building | 57,600 | 29,485 | 22,354 | seidel is 95% faster than poly2tri
+Dude shape | 7,692 | 4,046 | 4,530 | seidel is 70% faster than libtess
+Nazca monkey shape | 487 | 281 | 359 | seidel is 36% faster than libtess
 
 Another advantage of Seidel's algorithm is that it's potentially more forgiving to bad input data, so the goal is to
 handle as many bad data cases as possible, dropping the [JS Clipper](http://sourceforge.net/projects/jsclipper/) preprocessing
