@@ -40,11 +40,10 @@ function triangulate(rings) {
 
     // Generate the triangles
     for (i = 0; i < edges.length; i++) {
-        if (edges[i].mpoints.length) done = triangulateMountain(edges[i], triangles);
-        if (!done) return null;
+        if (edges[i].mpoints.length) triangulateMountain(edges[i], triangles);
     }
 
-    return triangles;
+    return triangles.length ? triangles : null;
 }
 
 // Shear transform. May effect numerical robustness

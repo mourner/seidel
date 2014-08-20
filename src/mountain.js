@@ -25,8 +25,8 @@ function triangulateMountain(edge, triangles) {
 
     var p = list.head.next;
 
-    if (list.length < 3) return false;
-    else if (list.length === 3) { triangles.push([a, p, b]); return true; }
+    if (list.length < 3) return;
+    else if (list.length === 3) { triangles.push([a, p, b]); return; }
 
     // triangles.push(monoPoly(list)); return;
 
@@ -50,8 +50,6 @@ function triangulateMountain(edge, triangles) {
         addEar(convexPoints, prev, list, positive);
         addEar(convexPoints, next, list, positive);
     }
-
-    return true;
 }
 
 function compareX(a, b) {
