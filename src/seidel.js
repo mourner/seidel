@@ -46,7 +46,7 @@ function triangulate(rings) {
 }
 
 // Shear transform. May effect numerical robustness
-var SHEAR = 1e-14;
+var SHEAR = 1e-10;
 
 function shearTransform(point) {
     return new Point(point[0] + SHEAR * point[1], point[1]);
