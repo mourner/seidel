@@ -4,18 +4,52 @@ A JavaScript implementation of polygon triangulation based on [Seidel's incremen
 Initially ported from earlier Scala/Python versions of [poly2tri](https://code.google.com/p/poly2tri/) by Mason Green,
 it since has been heavily optimized and improved (including hole support).
 
-Still yet to be implemented:
-
-- true nlog*(n) randomized algorithm (eliminating current nlog(n) bottlenecks) [#1](https://github.com/mapbox/seidel/issues/1)
-- handling degenerate cases (segments touching edges, edges touching edges) [#5](https://github.com/mapbox/seidel/issues/5)
-- test coverage [#3](https://github.com/mapbox/seidel/issues/3)
-
 #### Usage
 
 ```js
 var points = [[[10, 0], [0, 50], [60, 60], [70, 10]]];
 seidel(points); // returns an array of triangles (arrays of 3 point objects each)
 ```
+
+#### Why another triangulation library?
+
+The aim of this project is to create a JS triangulation library that is fast enough for real-time browser use cases,
+sacrificing triangulation quality for raw speed.
+
+The current state of the art in JS polygon triangulation is [poly2tri.js](https://github.com/r3mi/poly2tri.js),
+which implements Constrained Delaunay Triangulation algorithm. It produces the best quality triangulation,
+and it's quite fast, but its performance is still limited. This Seidel's implementation already significantly surpasses
+it (while still having some nice room for further improvement):
+
+```bash
+$ node debug/bench.js
+
+dude shape (94 vertices)
+seidel x 7,952 ops/sec ±0.51% (100 runs sampled)
+poly2tri x 4,243 ops/sec ±0.79% (97 runs sampled)
+seidel is 87% faster than poly2tri
+
+4-point building:
+seidel x 207,510 ops/sec ±0.56% (99 runs sampled)
+poly2tri x 124,809 ops/sec ±1.26% (97 runs sampled)
+seidel is 66% faster than poly2tri
+
+monkey (1204 vertices)
+seidel x 467 ops/sec ±0.71% (91 runs sampled)
+poly2tri x 294 ops/sec ±0.91% (91 runs sampled)
+seidel is 59% faster than poly2tri
+```
+
+Another advantage of Seidel's algorithm is that it's potentially more forgiving to bad input data, so the goal is to
+handle as many bad data cases as possible, dropping the clipper.js requirement when triangulating user-generated data
+such as [OpenStreetMap vector tiles](https://www.mapbox.com/blog/mapbox-gl-js/).
+
+
+#### To Do
+
+- true nlog*(n) randomized algorithm (eliminating current nlog(n) bottlenecks) [#1](https://github.com/mapbox/seidel/issues/1)
+- handling degenerate cases (segments touching edges, edges touching edges) [#5](https://github.com/mapbox/seidel/issues/5)
+- test coverage [#3](https://github.com/mapbox/seidel/issues/3)
 
 #### Browser builds
 
