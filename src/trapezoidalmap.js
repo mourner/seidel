@@ -177,8 +177,8 @@ TrapezoidalMap.prototype = {
         for (i = 0; i < len; i++) {
             t = this.items[i];
             if (t.removed) continue;
-            if (t.top === this.root.top && t.bottom.below) { t.bottom.below.markInside(); break; }
-            if (t.bottom === this.root.bottom && t.top.above) { t.top.above.markInside(); break; }
+            if (t.top === this.root.top && t.bottom.below && !t.bottom.below.removed) { t.bottom.below.markInside(); break; }
+            if (t.bottom === this.root.bottom && t.top.above && !t.top.above.removed) { t.top.above.markInside(); break; }
         }
 
         // collect interior monotone mountain points
