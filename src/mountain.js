@@ -31,7 +31,7 @@ function triangulateMountain(edge, triangles) {
     // triangles.push(monoPoly(list)); return;
 
     var convexPoints = [],
-        positive = util.cross(p, b, a) >= 0;
+        positive = util.cross(p, b, a) > 0;
 
     while (p !== list.tail) {
         addEar(convexPoints, p, list, positive);
@@ -64,7 +64,7 @@ function addEar(points, p, list, positive) {
 }
 
 function isConvex(p, positive) {
-    return positive === (util.cross(p.next, p.prev, p) >= 0);
+    return positive === (util.cross(p.next, p.prev, p) > 0);
 }
 
 // function monoPoly(list) {
