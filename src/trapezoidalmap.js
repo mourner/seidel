@@ -27,8 +27,16 @@ TrapezoidalMap.prototype = {
         var t = this.queryGraph.locate(edge.p, edge.slope);
         if (!t) return false;
 
+        var cp, cq;
+
         while (t) {
-            t = this.splitTrapezoid(t, edge);
+            cp = cp ? false : t.contains(edge.p);
+            cq = cq ? false : t.contains(edge.q);
+
+            t = cp && cq ?   this.case1(t, edge) :
+                cp && !cq ?  this.case2(t, edge) :
+                !cp && !cq ? this.case3(t, edge) : this.case4(t, edge);
+
             if (t === null) return false;
         }
 
@@ -41,16 +49,6 @@ TrapezoidalMap.prototype = {
     nextTrapezoid: function (t, edge) {
         return edge.q.x <= t.rightPoint.x ? false :
             util.edgeAbove(edge, t.rightPoint) ? t.upperRight : t.lowerRight;
-    },
-
-    splitTrapezoid: function (t, edge) {
-        // Bisect old trapezoids and create new
-        var cp = t.contains(edge.p),
-            cq = t.contains(edge.q);
-
-        return cp && cq ? this.case1(t, edge) :
-               cp && !cq ? this.case2(t, edge) :
-               !cp && !cq ? this.case3(t, edge) : this.case4(t, edge);
     },
 
     /*  _________

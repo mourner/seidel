@@ -24,9 +24,9 @@ Benchmarks show that its by far the fastest among JS triangulation libraries, in
 
 (ops/sec) | points | seidel | poly2tri | libtess | fastest vs 2nd fastest
 --- | --- | --- | --- | --- | ---
-OSM building | 15 | _76,361_ | _29,041_ | _21,825_ | seidel vs poly2tri, 163% faster
-dude shape | 94 | _9,845_ | _3,782_ | _4,336_ | seidel vs libtess, 127% faster
-nazca monkey | 1204 | _578_ | _266_ | _332_ | seidel vs libtess, 74% faster
+OSM building | 15 | _79,031_ | _28,848_ | _21,810_ | seidel vs poly2tri, 174% faster
+dude shape | 94 | _10,201_ | _3,692_ | _4,566_ | seidel vs libtess, 123% faster
+nazca monkey | 1204 | _611_ | _254_ | _337_ | seidel vs libtess, 81% faster
 
 #### Browser builds
 

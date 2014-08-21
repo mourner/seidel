@@ -1,6 +1,6 @@
 {
   "name": "seidel",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Seidel's polygon triangulation algorithm implementation",
   "main": "src/seidel.js",
   "scripts": {
