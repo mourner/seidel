@@ -1,10 +1,9 @@
 ## Seidel's polygon triangulation
 
-A crazy fast JavaScript implementation of polygon triangulation based on [Seidel's incremental randomized algorithm](https://www.cs.princeton.edu/courses/archive/fall05/cos528/handouts/A%20Simple%20and%20fast.pdf), created to be used in WebGL apps.
+The fastest and smallest JavaScript polygon triangulation library for your WebGL apps, based on [Seidel's incremental randomized algorithm](https://www.cs.princeton.edu/courses/archive/fall05/cos528/handouts/A%20Simple%20and%20fast.pdf). 2.7KB gzipped.
 
 Initially ported from earlier versions of [poly2tri](https://code.google.com/p/poly2tri/) by Mason Green,
 it since has been heavily optimized and improved.
-Currently only supports strictly simple polygons with holes (no intersecting/overlapping edges).
 
 #### Usage
 
@@ -12,6 +11,9 @@ Currently only supports strictly simple polygons with holes (no intersecting/ove
 var points = [[[10, 0], [0, 50], [60, 60], [70, 10]]];
 seidel(points); // returns an array of triangles (arrays of 3 point objects each)
 ```
+
+The library only supports strictly simple polygons with holes (no intersecting/overlapping edges).
+If you need to support weak/complex polygons, preprocess your data with [JS Clipper](http://sourceforge.net/p/jsclipper/wiki/documentation/#clipperlibclippersimplifypolygon).
 
 #### Why another triangulation library?
 
@@ -22,15 +24,9 @@ In the current benchmarks, its performance already surpsasses the fastest existi
 
 (ops/sec) | points | seidel | poly2tri | libtess | fastest vs 2nd fastest
 --- | --- | --- | --- | --- | ---
-OSM building | 15 | _64,110_ | _29,127_ | _22,287_ | seidel vs poly2tri, 120% faster
-dude shape | 94 | _8,103_ | _3,962_ | _4,605_ | seidel vs libtess, 76% faster
-nazca monkey | 1204 | _539_ | _277_ | _335_ | seidel vs libtess, 61% faster
-
-#### To Do
-
-- eliminate current performance bottlenecks [#1](https://github.com/mapbox/seidel/issues/1)
-- handle degenerate cases (e.g. segments touching edges, edges touching edges) [#5](https://github.com/mapbox/seidel/issues/5)
-- cover with tests [#3](https://github.com/mapbox/seidel/issues/3)
+OSM building | 15 | _74,740_ | _29,617_ | _22,402_ | seidel vs poly2tri, 152% faster
+dude shape | 94 | _9,294_ | _3,979_ | _4,368_ | seidel vs libtess, 113% faster
+nazca monkey | 1204 | _593_ | _353_ | _273_ | seidel vs libtess, 68% faster
 
 #### Browser builds
 
