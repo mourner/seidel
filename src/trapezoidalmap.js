@@ -80,11 +80,9 @@ TrapezoidalMap.prototype = {
        |____|____|
     */
     case2: function (t, e) {
-        var rp = e.q.x === t.rightPoint.x ? e.q : t.rightPoint;
-
         var t1 = new Trapezoid(t.leftPoint, e.p, t.top, t.bottom),
-            t2 = new Trapezoid(e.p, rp, t.top, e),
-            t3 = new Trapezoid(e.p, rp, e, t.bottom);
+            t2 = new Trapezoid(e.p, t.rightPoint, t.top, e),
+            t3 = new Trapezoid(e.p, t.rightPoint, e, t.bottom);
 
         t1.updateLeft(t.upperLeft, t.lowerLeft);
         t2.updateLeftRight(t1, null, t.upperRight, null);
@@ -106,16 +104,14 @@ TrapezoidalMap.prototype = {
        |________|
     */
     case3: function (t, e) {
-        var lp = e.p.x === t.leftPoint.x ?  e.p : t.leftPoint,
-            rp = e.q.x === t.rightPoint.x ? e.q : t.rightPoint,
-            t1, t2;
+        var t1, t2;
 
         if (this.tcross === t.top) {
             t1 = t.upperLeft;
             t1.updateRight(t.upperRight, null);
-            t1.rightPoint = rp;
+            t1.rightPoint = t.rightPoint;
         } else {
-            t1 = new Trapezoid(lp, rp, t.top, e);
+            t1 = new Trapezoid(t.leftPoint, t.rightPoint, t.top, e);
             t1.updateLeftRight(t.upperLeft, e.above, t.upperRight, null);
             this.items.push(t1);
         }
@@ -123,9 +119,9 @@ TrapezoidalMap.prototype = {
         if (this.bcross === t.bottom) {
             t2 = t.lowerLeft;
             t2.updateRight(null, t.lowerRight);
-            t2.rightPoint = rp;
+            t2.rightPoint = t.rightPoint;
         } else {
-            t2 = new Trapezoid(lp, rp, e, t.bottom);
+            t2 = new Trapezoid(t.leftPoint, t.rightPoint, e, t.bottom);
             t2.updateLeftRight(e.below, t.lowerLeft, null, t.lowerRight);
             this.items.push(t2);
         }
@@ -144,14 +140,13 @@ TrapezoidalMap.prototype = {
        |____|____|
     */
     case4: function (t, e) {
-        var lp = e.p.x === t.leftPoint.x ? e.p : t.leftPoint,
-            t1, t2, t3;
+        var t1, t2, t3;
 
         if (this.tcross === t.top) {
             t1 = t.upperLeft;
             t1.rightPoint = e.q;
         } else {
-            t1 = new Trapezoid(lp, e.q, t.top, e);
+            t1 = new Trapezoid(t.leftPoint, e.q, t.top, e);
             t1.updateLeft(t.upperLeft, e.above);
             this.items.push(t1);
         }
@@ -160,7 +155,7 @@ TrapezoidalMap.prototype = {
             t2 = t.lowerLeft;
             t2.rightPoint = e.q;
         } else {
-            t2 = new Trapezoid(lp, e.q, e, t.bottom);
+            t2 = new Trapezoid(t.leftPoint, e.q, e, t.bottom);
             t2.updateLeft(e.below, t.lowerLeft);
             this.items.push(t2);
         }
