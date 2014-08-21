@@ -19,11 +19,11 @@
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
 
-        console.profile('seidel');
-        for (var i = 0; i < 1000; i++) {
+        // console.profile('seidel');
+        // for (var i = 0; i < 1000; i++) {
             triangles = seidel(testPoints);
-        }
-        console.profileEnd('seidel');
+        // }
+        // console.profileEnd('seidel');
 
         var minX = Infinity,
             maxX = -Infinity,
@@ -44,6 +44,14 @@
 
         var ratio = (canvas.height - 5) / height;
         canvas.width = canvas.height * width / height + 5;
+
+        if (devicePixelRatio > 1) {
+            canvas.style.width = canvas.width + 'px';
+            canvas.style.height = canvas.height + 'px';
+            canvas.width *= 2;
+            canvas.height *= 2;
+            ctx.scale(2, 2);
+        }
 
         for (var i = 0; triangles && i < triangles.length; i++) {
             drawPoly(triangles[i], 'rgba(255,0,0,0.5)', 'rgba(255,255,0,0.07)');
