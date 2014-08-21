@@ -10,12 +10,21 @@ var DoublyLinkedList = require('./dlinkedlist'),
 
 function triangulateMountain(edge, triangles) {
 
-    var list = new DoublyLinkedList(),
-        a = edge.p,
+    var a = edge.p,
         b = edge.q,
-        points = edge.mpoints;
+        points = edge.mpoints,
+        p = points[0],
+        len = points.length;
+
+    if (len === 1 && util.neq(p, a) && util.neq(p, b)) { triangles.push([a, p, b]); return; }
+
+    // silly heuristic optimizations (remove some duplicates before sorting)
+    if (len >= 3 && !util.neq(points[len - 1], points[len - 3])) { points.pop(); len--; }
+    if (len >= 3 && !util.neq(p, points[2])) points.shift();
 
     points.sort(compareX);
+
+    var list = new DoublyLinkedList();
 
     list.add(a);
     for (var i = 0; i < points.length; i++) {
@@ -23,7 +32,7 @@ function triangulateMountain(edge, triangles) {
     }
     if (util.neq(b, list.tail)) list.add(b);
 
-    var p = list.head.next;
+    p = list.head.next;
 
     if (list.length < 3) return;
     else if (list.length === 3) { triangles.push([a, p, b]); return; }
