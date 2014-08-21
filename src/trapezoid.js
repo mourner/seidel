@@ -3,7 +3,7 @@
 module.exports = Trapezoid;
 
 var util = require('./util'),
-    List = require('./dlinkedlist');
+    Polygon = require('./polygon');
 
 function Trapezoid(leftPoint, rightPoint, top, bottom) {
     this.leftPoint = leftPoint;
@@ -66,24 +66,25 @@ Trapezoid.prototype = {
     },
 
     addPoint: function (edge, point) {
-        if (!edge.list) {
+        var poly = edge.poly;
+        if (!poly) {
             if (util.neq(point, edge.p) && util.neq(point, edge.q)) {
-                edge.list = new List();
-                edge.list.add(edge.p);
-                edge.list.add(point);
-                edge.list.add(edge.q);
+                poly = edge.poly = new Polygon();
+                poly.add(edge.p);
+                poly.add(point);
+                poly.add(edge.q);
             }
         } else {
-            var p = edge.list.head;
-            while (p) {
-                if (!util.neq(point, p.item)) return;
-                if (point.x < p.item.x) {
-                    edge.list.insertBefore(point, p);
+            var v = poly.first;
+            while (v) {
+                if (!util.neq(point, v.point)) return;
+                if (point.x < v.point.x) {
+                    poly.insertBefore(point, v);
                     return;
                 }
-                p = p.next;
+                v = v.next;
             }
-            edge.list.add(point);
+            poly.add(point);
         }
     },
 

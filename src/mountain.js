@@ -11,19 +11,19 @@ function triangulateMountain(edge, triangles) {
 
     var a = edge.p,
         b = edge.q,
-        list = edge.list,
-        p = list.head.next;
+        poly = edge.poly,
+        p = poly.first.next;
 
-    if (list.length < 3) return;
-    else if (list.length === 3) { triangles.push([a, p.item, b]); return; }
+    if (poly.length < 3) return;
+    else if (poly.length === 3) { triangles.push([a, p.point, b]); return; }
 
-    // triangles.push(monoPoly(list)); return;
+    // triangles.push(monoPoly(poly)); return;
 
     var convexPoints = [],
-        positive = util.cross(p.item, b, a) > 0;
+        positive = util.cross(p.point, b, a) > 0;
 
-    while (p !== list.tail) {
-        addEar(convexPoints, p, list, positive);
+    while (p !== poly.last) {
+        addEar(convexPoints, p, poly, positive);
         p = p.next;
     }
 
@@ -32,32 +32,32 @@ function triangulateMountain(edge, triangles) {
             prev = ear.prev,
             next = ear.next;
 
-        triangles.push([prev.item, ear.item, next.item]);
+        triangles.push([prev.point, ear.point, next.point]);
 
-        list.remove(ear);
+        poly.remove(ear);
 
-        addEar(convexPoints, prev, list, positive);
-        addEar(convexPoints, next, list, positive);
+        addEar(convexPoints, prev, poly, positive);
+        addEar(convexPoints, next, poly, positive);
     }
 }
 
-function addEar(points, p, list, positive) {
-    if (!p.ear && p !== list.head && p !== list.tail && isConvex(p, positive)) {
+function addEar(points, p, poly, positive) {
+    if (!p.ear && p !== poly.first && p !== poly.last && isConvex(p, positive)) {
         p.ear = true;
         points.push(p);
     }
 }
 
 function isConvex(p, positive) {
-    return positive === (util.cross(p.next.item, p.prev.item, p.item) > 0);
+    return positive === (util.cross(p.next.point, p.prev.point, p.point) > 0);
 }
 
-// function monoPoly(list) {
-//     var poly = [];
-//     var p = list.head;
+// function monoPoly(poly) {
+//     var points = [];
+//     var p = poly.first;
 //     while (p) {
-//         poly.push(p.item);
+//         points.push(p.point);
 //         p = p.next;
 //     }
-//     return poly;
+//     return points;
 // }

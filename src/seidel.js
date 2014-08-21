@@ -40,7 +40,7 @@ function triangulate(rings) {
 
     // Generate the triangles
     for (i = 0; i < edges.length; i++) {
-        if (edges[i].list && edges[i].list.length) triangulateMountain(edges[i], triangles);
+        if (edges[i].poly && edges[i].poly.length) triangulateMountain(edges[i], triangles);
     }
 
     return triangles.length ? triangles : null;
