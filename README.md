@@ -1,8 +1,10 @@
 ## Seidel's polygon triangulation
 
-A crazy fast JavaScript implementation of polygon triangulation based on [Seidel's incremental randomized algorithm](https://www.cs.princeton.edu/courses/archive/fall05/cos528/handouts/A%20Simple%20and%20fast.pdf).
+A crazy fast JavaScript implementation of polygon triangulation based on [Seidel's incremental randomized algorithm](https://www.cs.princeton.edu/courses/archive/fall05/cos528/handouts/A%20Simple%20and%20fast.pdf), created to be used in WebGL apps.
+
 Initially ported from earlier versions of [poly2tri](https://code.google.com/p/poly2tri/) by Mason Green,
 it since has been heavily optimized and improved.
+Currently only supports strictly simple polygons with holes (no intersecting/overlapping edges).
 
 #### Usage
 
@@ -20,9 +22,9 @@ In the current benchmarks, its performance already surpsasses the fastest existi
 
 (ops/sec) | points | seidel | poly2tri | libtess | fastest vs 2nd fastest
 --- | --- | --- | --- | --- | ---
-OSM building | 15 | _57,600_ | _29,485_ | _22,354_ | seidel vs poly2tri, 95% faster
-dude shape | 94 | _7,692_ | _4,046_ | _4,530_ | seidel vs libtess, 70% faster
-nazca monkey | 1204 | _487_ | _281_ | _359_ | seidel vs libtess, 36% faster
+OSM building | 15 | _64,110_ | _29,127_ | _22,287_ | seidel vs poly2tri, 120% faster
+dude shape | 94 | _8,103_ | _3,962_ | _4,605_ | seidel vs libtess, 76% faster
+nazca monkey | 1204 | _539_ | _277_ | _335_ | seidel vs libtess, 61% faster
 
 #### To Do
 
