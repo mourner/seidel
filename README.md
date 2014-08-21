@@ -20,13 +20,13 @@ If you need to support weak/complex polygons, preprocess your data with [JS Clip
 The aim of this project is to create a JS triangulation library that is **fast enough for real-time triangulation in the browser**,
 sacrificing triangulation quality for raw speed.
 
-In the current benchmarks, its performance already surpsasses the fastest existing libraries:
+Benchmarks show that its by far the fastest among JS triangulation libraries, in addition to being the smallest and simplest:
 
 (ops/sec) | points | seidel | poly2tri | libtess | fastest vs 2nd fastest
 --- | --- | --- | --- | --- | ---
-OSM building | 15 | _74,740_ | _29,617_ | _22,402_ | seidel vs poly2tri, 152% faster
-dude shape | 94 | _9,294_ | _3,979_ | _4,368_ | seidel vs libtess, 113% faster
-nazca monkey | 1204 | _593_ | _353_ | _273_ | seidel vs libtess, 68% faster
+OSM building | 15 | _76,361_ | _29,041_ | _21,825_ | seidel vs poly2tri, 163% faster
+dude shape | 94 | _9,845_ | _3,782_ | _4,336_ | seidel vs libtess, 127% faster
+nazca monkey | 1204 | _578_ | _266_ | _332_ | seidel vs libtess, 74% faster
 
 #### Browser builds
 
