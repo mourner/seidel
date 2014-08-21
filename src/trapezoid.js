@@ -2,8 +2,8 @@
 
 module.exports = Trapezoid;
 
-var util = require('./util');
-
+var util = require('./util'),
+    List = require('./dlinkedlist');
 
 function Trapezoid(leftPoint, rightPoint, top, bottom) {
     this.leftPoint = leftPoint;
@@ -65,16 +65,33 @@ Trapezoid.prototype = {
                util.edgeBelow(this.bottom, point);
     },
 
-    addPoint: function (array, point) {
-        var len = array.length;
-        if (!len || util.neq(array[len - 1], point)) array.push(util.clone(point));
+    addPoint: function (edge, point) {
+        if (!edge.list) {
+            if (util.neq(point, edge.p) && util.neq(point, edge.q)) {
+                edge.list = new List();
+                edge.list.add(edge.p);
+                edge.list.add(point);
+                edge.list.add(edge.q);
+            }
+        } else {
+            var p = edge.list.head;
+            while (p) {
+                if (!util.neq(point, p.item)) return;
+                if (point.x < p.item.x) {
+                    edge.list.insertBefore(point, p);
+                    return;
+                }
+                p = p.next;
+            }
+            edge.list.add(point);
+        }
     },
 
     addPoints: function () {
-        if (this.leftPoint !== this.bottom.p) this.addPoint(this.bottom.mpoints, this.leftPoint);
-        if (this.rightPoint !== this.bottom.q) this.addPoint(this.bottom.mpoints, this.rightPoint);
+        if (this.leftPoint !== this.bottom.p) this.addPoint(this.bottom, this.leftPoint);
+        if (this.rightPoint !== this.bottom.q) this.addPoint(this.bottom, this.rightPoint);
 
-        if (this.leftPoint !== this.top.p) this.addPoint(this.top.mpoints, this.leftPoint);
-        if (this.rightPoint !== this.top.q) this.addPoint(this.top.mpoints, this.rightPoint);
+        if (this.leftPoint !== this.top.p) this.addPoint(this.top, this.leftPoint);
+        if (this.rightPoint !== this.top.q) this.addPoint(this.top, this.rightPoint);
     }
 };

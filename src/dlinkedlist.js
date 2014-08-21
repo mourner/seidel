@@ -8,8 +8,16 @@ function DoublyLinkedList() {
 	this.tail = null;
 }
 
+function DoublyLinkedNode(item) {
+	this.item = item;
+	this.next = null;
+	this.prev = null;
+	this.ear = false;
+}
+
 DoublyLinkedList.prototype = {
-	add: function (node) {
+	add: function (item) {
+		var node = new DoublyLinkedNode(item);
 
 		if (!this.length) {
 			this.head = this.tail = node;
@@ -47,9 +55,16 @@ DoublyLinkedList.prototype = {
 		this.length--;
 	},
 
-	pop: function () {
-		var node = this.tail;
-		this.remove(node);
-		return node;
+	insertBefore: function (item, node) {
+		var newNode = new DoublyLinkedNode(item);
+		newNode.prev = node.prev;
+		newNode.next = node;
+
+		if (!node.prev) this.head = newNode;
+		else node.prev.next = newNode;
+
+		node.prev = newNode;
+
+		this.length++;
 	}
 };
