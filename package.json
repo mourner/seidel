@@ -5,9 +5,10 @@
   "main": "src/seidel.js",
   "scripts": {
     "test": "jshint src",
-    "watch": "mkdirp dist && watchify -v -d src/seidel.js -s seidel -o dist/seidel.dev.js",
-    "build-dev": "mkdirp dist && browserify -d src/seidel.js -s seidel > dist/seidel.dev.js",
-    "build-min": "mkdirp dist && browserify src/seidel.js -s seidel | uglifyjs -c warnings=false -m > dist/seidel.min.js"
+    "watch": "watchify -v -d src/seidel.js -s seidel -o dist/seidel.dev.js",
+    "build-dev": "browserify -d src/seidel.js -s seidel > dist/seidel.dev.js",
+    "build-min": "browserify src/seidel.js -s seidel | uglifyjs -c warnings=false -m > dist/seidel.min.js",
+    "prepublish": "mkdirp dist && npm run build-dev && npm run build-min"
   },
   "author": "Mason Green",
   "license": "MIT",
