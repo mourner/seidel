@@ -61,12 +61,11 @@ TrapezoidalMap.prototype = {
             t3 = new Trapezoid(e.p, e.q, e, t.bottom),
             t4 = new Trapezoid(e.q, t.rightPoint, t.top, t.bottom);
 
-        t.rightPoint = e.p;
-
-        t.updateLeft(t.upperLeft, t.lowerLeft);
-        t2.updateLeftRight(t, null, t4, null);
-        t3.updateLeftRight(null, t, null, t4);
         t4.updateRight(t.upperRight, t.lowerRight);
+        t4.updateLeft(t2, t3);
+
+        t.rightPoint = e.p;
+        t.updateRight(t2, t3);
 
         var sink = t.sink;
         t.sink = null;
