@@ -218,7 +218,12 @@ TrapezoidalMap.prototype = {
         // collect interior monotone mountain points
         for (i = 0; i < len; i++) {
             t = this.items[i];
-            if (!t.removed && t.inside) t.addPoints();
+            if (!t.removed && t.inside) {
+                // if a trapezoid marked as inside has an infinite boundary, then something has gone wrong
+                if (t.top.p.y === Infinity) return false;
+                t.addPoints();
+            }
         }
+        return true;
     }
 };

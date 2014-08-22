@@ -36,7 +36,8 @@ function triangulate(rings) {
         done = map.addEdge(edges[i]);
         if (!done) return null;
     }
-    map.collectPoints();
+    done = map.collectPoints();
+    if (!done) return null;
 
     // Generate the triangles
     for (i = 0; i < edges.length; i++) {
