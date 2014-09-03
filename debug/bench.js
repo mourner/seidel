@@ -12,6 +12,7 @@ var seidel = require('../src/seidel');
 var poly2tri = require('poly2tri');
 var pnltri = require('./pnltri.js');
 var libtess = require('libtess');
+var earcut = require('../src/earcut');
 
 var Benchmark = require('benchmark');
 
@@ -57,6 +58,9 @@ for (var sample in samples) {
 	console.log(sample + ' (' + points.reduce(function(prev, cur) { return prev + cur.length; }, 0) + ' vertices):');
 
 	new Benchmark.Suite()
+	.add('earcut', function () {
+		earcut(points[0]);
+	})
 	.add('pnltri', function () {
 		var triangulator = new pnltri.Triangulator();
 		triangulator.triangulate_polygon(data2);
