@@ -16,7 +16,7 @@ function cross(a, b, c) {
         acy = a.y - c.y,
         bcy = b.y - c.y;
     return acx * bcy - acy * bcx;
-};
+}
 exports.cross = cross;
 
 exports.edgeOrient = function (edge, point) { return cross(edge.p, edge.q, point); };
