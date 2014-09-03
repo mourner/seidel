@@ -42,14 +42,21 @@ function isEar(ear, clockwise) {
         c = ear.next.p,
 
         ax = a[0], bx = b[0], cx = c[0],
-        ay = a[1], by = b[1], cy = c[1];
+        ay = a[1], by = b[1], cy = c[1],
 
-    if (clockwise !== ((ax - cx) * (by - cy) > (ay - cy) * (bx - cx))) return false; // reflex
+        abd = ax * by - ay * bx,
+        acd = ax * cy - ay * cx,
+        cbd = cx * by - cy * bx,
+        A = abd - acd - cbd;
 
-    var A = (ay - by) * cx + (bx - ax) * cy + (ax * by - ay * bx),
-        sign = clockwise ? 1 : -1,
+    if (clockwise !== (A > 0)) return false; // reflex
 
+    var sign = clockwise ? 1 : -1,
         node = ear.next.next,
+        cay = cy - ay,
+        acx = ax - cx,
+        aby = ay - by,
+        bax = bx - ax,
         p, px, py, s, t;
 
     while (node !== ear.prev) {
@@ -57,8 +64,8 @@ function isEar(ear, clockwise) {
         px = p[0];
         py = p[1];
 
-        s = (ay * cx - ax * cy + (cy - ay) * px + (ax - cx) * py) * sign;
-        t = (ax * by - ay * bx + (ay - by) * px + (bx - ax) * py) * sign;
+        s = (cay * px + acx * py - acd) * sign;
+        t = (aby * px + bax * py + abd) * sign;
 
         if (s >= 0 && t >= 0 && (s + t) <= A * sign) return false;
 
