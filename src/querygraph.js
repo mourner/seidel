@@ -2,7 +2,7 @@
 
 module.exports = QueryGraph;
 
-var util = require('./util');
+var edgeOrient = require('./util').edgeOrient;
 
 
 function QueryGraph(head) {
@@ -22,7 +22,7 @@ QueryGraph.prototype = {
                 node = point.x >= node.point.x ? node.rchild : node.lchild;
 
             } else if (node.edge) {
-                orient = util.edgeOrient(node.edge, point);
+                orient = edgeOrient(node.edge, point);
                 node =
                     orient < 0 ? node.rchild :
                     orient > 0 ? node.lchild :

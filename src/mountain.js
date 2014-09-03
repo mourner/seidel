@@ -2,7 +2,7 @@
 
 module.exports = triangulateMountain;
 
-var util = require('./util');
+var cross = require('./util').cross;
 
 
 // triangulates a monotone mountain based on `edge`, adding resulting triangles to the `triangles` array
@@ -20,7 +20,7 @@ function triangulateMountain(edge, triangles) {
     // triangles.push(monoPoly(poly)); return;
 
     var convexPoints = [],
-        positive = util.cross(p.point, b, a) > 0;
+        positive = cross(p.point, b, a) > 0;
 
     while (p !== poly.last) {
         addEar(convexPoints, p, poly, positive);
@@ -49,7 +49,7 @@ function addEar(points, p, poly, positive) {
 }
 
 function isConvex(p, positive) {
-    return positive === (util.cross(p.next.point, p.prev.point, p.point) > 0);
+    return positive === (cross(p.next.point, p.prev.point, p.point) > 0);
 }
 
 // function monoPoly(poly) {

@@ -6,7 +6,7 @@ var Trapezoid = require('./trapezoid'),
     Point = require('./point'),
     Edge = require('./edge'),
     QueryGraph = require('./querygraph'),
-    util = require('./util');
+    edgeAbove = require('./util').edgeAbove;
 
 
 function TrapezoidalMap() {
@@ -48,7 +48,7 @@ TrapezoidalMap.prototype = {
 
     nextTrapezoid: function (t, edge) {
         return edge.q.x <= t.rightPoint.x ? false :
-            util.edgeAbove(edge, t.rightPoint) ? t.upperRight : t.lowerRight;
+            edgeAbove(edge, t.rightPoint) ? t.upperRight : t.lowerRight;
     },
 
     /*  _________

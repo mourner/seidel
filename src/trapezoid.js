@@ -3,6 +3,9 @@
 module.exports = Trapezoid;
 
 var util = require('./util'),
+    edgeAbove = util.edgeAbove,
+    edgeBelow = util.edgeBelow,
+    neq = util.neq,
     Polygon = require('./polygon');
 
 function Trapezoid(leftPoint, rightPoint, top, bottom) {
@@ -61,14 +64,14 @@ Trapezoid.prototype = {
     contains: function (point) {
         return point.x > this.leftPoint.x &&
                point.x < this.rightPoint.x &&
-               util.edgeAbove(this.top, point) &&
-               util.edgeBelow(this.bottom, point);
+               edgeAbove(this.top, point) &&
+               edgeBelow(this.bottom, point);
     },
 
     addPoint: function (edge, point) {
         var poly = edge.poly;
         if (!poly) {
-            if (util.neq(point, edge.p) && util.neq(point, edge.q)) {
+            if (neq(point, edge.p) && neq(point, edge.q)) {
                 poly = edge.poly = new Polygon();
                 poly.add(edge.p);
                 poly.add(point);
@@ -77,7 +80,7 @@ Trapezoid.prototype = {
         } else {
             var v = poly.first;
             while (v) {
-                if (!util.neq(point, v.point)) return;
+                if (!neq(point, v.point)) return;
                 if (point.x < v.point.x) {
                     poly.insertBefore(point, v);
                     return;
