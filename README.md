@@ -1,3 +1,8 @@
+**The project is now obsolete an superceded** by
+[Earcut](https://github.com/mapbox/earcut) triangulation library,
+which is much faster and more robust.
+The description below is now outdated.
+
 ## Seidel's polygon triangulation
 
 The fastest and smallest JavaScript polygon triangulation library for your WebGL apps, based on [Seidel's incremental randomized algorithm](https://www.cs.princeton.edu/courses/archive/fall05/cos528/handouts/A%20Simple%20and%20fast.pdf). 2.7KB gzipped.
